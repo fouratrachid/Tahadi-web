@@ -2,7 +2,7 @@
 
 The web version of the Tahadi offline Arabic party trivia game: two contestants and one referee who holds the device, reads questions aloud, and judges answers. Fully client-side — no backend, no accounts, everything bundled.
 
-This is a port of the React Native app in `../Tahadi`; the game logic (question selector, scoring, grapheme-safe word reversal) and all ~700 Arabic questions are shared with it. The web version's rules diverge from the mobile app: only **speed** is a timed per-team turn — every other challenge presents shared questions that either team may answer, and the referee credits whichever team actually answered:
+This is a port of the React Native app in `../Tahadi`; the game logic (question selector, scoring, grapheme-safe word reversal) is shared with it. The web version has 8 categories (football, anime, movies, general, religion, geography, history, Tunisia) and ~1,400 bundled Arabic questions — more than the mobile app. The web version's rules also diverge from the mobile app: only **speed** is a timed per-team turn — every other challenge presents shared questions that either team may answer, and the referee credits whichever team actually answered:
 
 - **whoAmI / ordering / reversed**: the referee reads/reveals the question, then taps the team that answered correctly (or ✗/skip if neither did).
 - **bell**: a tabletop buzzer. Lay the phone flat on the table between the two teams — each team gets a full-width tap zone (the far zone is rotated 180° so it reads right-side up from across the table). The referee reads the question, opens the buzzer, and the first team to tap gets the question. A wrong answer hands a steal attempt to the other team.
@@ -54,6 +54,6 @@ src/
   store/          gameStore (state machine) + settingsStore
   lib/            questionSelector, scoring, grapheme, packs, storage, soundManager, haptics
   i18n/ar.ts      every user-facing string (Arabic, MSA)
-  assets/packs/   20 bundled question packs (JSON, imported at build time)
+  assets/packs/   40 bundled question packs (JSON, imported at build time)
 public/sounds/    6 synthesized WAV effects
 ```
