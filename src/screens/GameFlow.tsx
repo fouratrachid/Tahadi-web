@@ -141,6 +141,22 @@ function Play() {
 
   if (!question) return null;
 
+  if (challenge === 'bell') {
+    return (
+      <BellArena
+        names={names}
+        scores={scores}
+        roundIndex={roundIndex}
+        totalRounds={config.challenges.length}
+        question={question}
+        progress={progress}
+        isPaused={isPaused}
+        pause={pause}
+        resume={resume}
+      />
+    );
+  }
+
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col px-4 py-4 sm:px-6">
       <ScoreHeader
@@ -167,7 +183,7 @@ function Play() {
             {AR.play.turnOf(names[activePlayer])}
           </span>
         ) : (
-          <span className="text-accent text-sm font-bold">{AR.challenges.bell.short}</span>
+          <span />
         )}
       </div>
 
@@ -270,7 +286,7 @@ function QuestionArea({ challenge, question }: { challenge: ChallengeType; quest
     );
   }
 
-  // speed & bell: plain large question + referee answer
+  // speed: plain large question + referee answer
   return (
     <div className={`${card} text-center`}>
       <p className="text-2xl leading-10 font-bold sm:text-3xl sm:leading-12">{question.text}</p>
@@ -281,38 +297,54 @@ function QuestionArea({ challenge, question }: { challenge: ChallengeType; quest
   );
 }
 
+/** Two team buttons for crediting whichever team answered a shared question. */
+function TeamAwardRow({
+  names,
+  onAward,
+  points,
+}: {
+  names: [string, string];
+  onAward: (team: PlayerIndex) => void;
+  points?: number;
+}) {
+  return (
+    <div className="flex gap-2.5">
+      {([0, 1] as PlayerIndex[]).map((p) => (
+        <button
+          key={p}
+          onClick={() => onAward(p)}
+          className="min-h-14 flex-1 cursor-pointer rounded-2xl px-3 text-base font-black transition active:scale-[0.97] sm:text-lg"
+          style={{ backgroundColor: PLAYER_COLORS[p], color: 'var(--color-bg)' }}
+        >
+          {points != null ? `${names[p]} +${toAr(points)}` : names[p]}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function WrongSkipRow({ onWrong, onSkip }: { onWrong: () => void; onSkip: () => void }) {
+  return (
+    <div className="flex gap-2.5">
+      <Button variant="danger" className="flex-1" onClick={onWrong}>
+        {`✗ ${AR.play.wrong}`}
+      </Button>
+      <Button variant="secondary" className="flex-1" onClick={onSkip}>
+        {AR.play.skip}
+      </Button>
+    </div>
+  );
+}
+
 function Controls({ challenge, names }: { challenge: ChallengeType; names: [string, string] }) {
   const revealedHints = useGameStore((s) => s.revealedHints);
   const orderingRevealed = useGameStore((s) => s.orderingRevealed);
   const answerCorrect = useGameStore((s) => s.answerCorrect);
+  const awardCorrect = useGameStore((s) => s.awardCorrect);
   const answerWrong = useGameStore((s) => s.answerWrong);
   const skipQuestion = useGameStore((s) => s.skipQuestion);
   const revealHint = useGameStore((s) => s.revealHint);
   const revealOrder = useGameStore((s) => s.revealOrder);
-  const awardBell = useGameStore((s) => s.awardBell);
-
-  if (challenge === 'bell') {
-    return (
-      <div className="flex flex-col gap-2.5">
-        <p className="text-txt2 text-center text-sm font-bold">{AR.play.whoAnswered}</p>
-        <div className="flex gap-2.5">
-          {([0, 1] as PlayerIndex[]).map((p) => (
-            <button
-              key={p}
-              onClick={() => awardBell(p)}
-              className="text-bg min-h-14 flex-1 cursor-pointer rounded-2xl px-4 text-lg font-black transition active:scale-[0.97]"
-              style={{ backgroundColor: PLAYER_COLORS[p] }}
-            >
-              {names[p]}
-            </button>
-          ))}
-        </div>
-        <Button variant="secondary" onClick={() => awardBell(null)}>
-          {AR.play.noOne}
-        </Button>
-      </div>
-    );
-  }
 
   if (challenge === 'whoAmI') {
     return (
@@ -322,14 +354,9 @@ function Controls({ challenge, names }: { challenge: ChallengeType; names: [stri
             {`${AR.play.revealHint} (${toAr(revealedHints + 1)}/${toAr(4)})`}
           </Button>
         ) : null}
-        <div className="flex gap-2.5">
-          <Button variant="danger" className="flex-1" onClick={answerWrong}>
-            {`✗ ${AR.play.wrong}`}
-          </Button>
-          <Button className="flex-1" onClick={answerCorrect}>
-            {`✓ ${AR.play.correct} +${toAr(WHOAMI_POINTS[revealedHints - 1] ?? 10)}`}
-          </Button>
-        </div>
+        <p className="text-txt2 text-center text-sm font-bold">{AR.play.whoAnswered}</p>
+        <TeamAwardRow names={names} onAward={awardCorrect} points={WHOAMI_POINTS[revealedHints - 1] ?? 10} />
+        <WrongSkipRow onWrong={answerWrong} onSkip={skipQuestion} />
       </div>
     );
   }
@@ -344,20 +371,24 @@ function Controls({ challenge, names }: { challenge: ChallengeType; names: [stri
     }
     return (
       <div className="flex flex-col gap-2.5">
-        <p className="text-txt2 text-center text-sm font-bold">{AR.play.judgePrompt}</p>
-        <div className="flex gap-2.5">
-          <Button variant="danger" className="flex-1" onClick={answerWrong}>
-            {`✗ ${AR.play.wrong}`}
-          </Button>
-          <Button className="flex-1" onClick={answerCorrect}>
-            {`✓ ${AR.play.correct}`}
-          </Button>
-        </div>
+        <p className="text-txt2 text-center text-sm font-bold">{AR.play.whoAnswered}</p>
+        <TeamAwardRow names={names} onAward={awardCorrect} />
+        <WrongSkipRow onWrong={answerWrong} onSkip={skipQuestion} />
       </div>
     );
   }
 
-  // speed & reversed: fast ✓ / ✗ / skip
+  if (challenge === 'reversed') {
+    return (
+      <div className="flex flex-col gap-2.5">
+        <p className="text-txt2 text-center text-sm font-bold">{AR.play.whoAnswered}</p>
+        <TeamAwardRow names={names} onAward={awardCorrect} />
+        <WrongSkipRow onWrong={answerWrong} onSkip={skipQuestion} />
+      </div>
+    );
+  }
+
+  // speed: fast ✓ / ✗ / skip, single-team timed turn
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex gap-2.5">
@@ -372,6 +403,176 @@ function Controls({ challenge, names }: { challenge: ChallengeType; names: [stri
         {AR.play.skip}
       </Button>
     </div>
+  );
+}
+
+// ---- Bell — tabletop buzzer -------------------------------------------------------
+
+function BellZone({
+  team,
+  name,
+  active,
+  highlighted,
+  onTap,
+  rotated = false,
+}: {
+  team: PlayerIndex;
+  name: string;
+  active: boolean;
+  highlighted: boolean;
+  onTap: () => void;
+  rotated?: boolean;
+}) {
+  const color = PLAYER_COLORS[team];
+  const lit = active || highlighted;
+  return (
+    <button
+      onClick={onTap}
+      disabled={!active}
+      className={`flex min-h-[25dvh] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-4 transition active:scale-[0.98] disabled:cursor-default ${
+        rotated ? 'rotate-180' : ''
+      }`}
+      style={{
+        backgroundColor: lit ? color : 'var(--color-surface-alt)',
+        borderColor: highlighted ? 'var(--color-warn)' : 'transparent',
+      }}
+    >
+      <span
+        className="text-2xl font-black sm:text-3xl"
+        style={{ color: lit ? 'var(--color-bg)' : 'var(--color-txt3)' }}
+      >
+        {name}
+      </span>
+      {active ? (
+        <span className="text-sm font-bold" style={{ color: 'var(--color-bg)', opacity: 0.9 }}>
+          {AR.play.bellTapZone}
+        </span>
+      ) : null}
+    </button>
+  );
+}
+
+function BellArena({
+  names,
+  scores,
+  roundIndex,
+  totalRounds,
+  question,
+  progress,
+  isPaused,
+  pause,
+  resume,
+}: {
+  names: [string, string];
+  scores: [number, number];
+  roundIndex: number;
+  totalRounds: number;
+  question: Question;
+  progress: { index: number; total: number };
+  isPaused: boolean;
+  pause: () => void;
+  resume: () => void;
+}) {
+  const bellPhase = useGameStore((s) => s.bellPhase);
+  const bellBuzzer = useGameStore((s) => s.bellBuzzer);
+  const armBell = useGameStore((s) => s.armBell);
+  const buzz = useGameStore((s) => s.buzz);
+  const bellJudge = useGameStore((s) => s.bellJudge);
+  const bellNoOne = useGameStore((s) => s.bellNoOne);
+
+  const zoneActive = bellPhase === 'armed' && !isPaused;
+  const buzzedTeam = bellPhase === 'buzzed' || bellPhase === 'steal' ? bellBuzzer : null;
+  const buzzedName = buzzedTeam != null ? names[buzzedTeam] : '';
+
+  return (
+    <main className="mx-auto flex h-dvh w-full max-w-2xl flex-col gap-2 px-3 py-3 sm:px-6">
+      <BellZone
+        team={1}
+        name={names[1]}
+        active={zoneActive}
+        highlighted={buzzedTeam === 1}
+        onTap={() => buzz(1)}
+        rotated
+      />
+
+      <div className="border-line bg-surface shrink-0 rounded-2xl border p-4">
+        <div className="flex items-center justify-between gap-2">
+          <button
+            onClick={isPaused ? resume : pause}
+            className="border-line bg-surface-alt text-amber min-h-9 cursor-pointer rounded-full border px-4 text-sm font-bold"
+          >
+            {isPaused ? AR.play.resume : AR.play.pause}
+          </button>
+          <span className="text-txt2 text-sm font-bold">
+            {`${AR.challenges.bell.name} · ${AR.roundIntro.round(roundIndex + 1, totalRounds)} · ${AR.play.questionOf(progress.index, progress.total)}`}
+          </span>
+          <span className="text-sm font-bold">
+            <span style={{ color: PLAYER_COLORS[0] }}>{toAr(scores[0])}</span>
+            {' – '}
+            <span style={{ color: PLAYER_COLORS[1] }}>{toAr(scores[1])}</span>
+          </span>
+        </div>
+
+        <p className={`mt-3 text-center text-lg font-bold sm:text-xl ${isPaused ? 'opacity-10' : ''}`}>
+          {question.text}
+        </p>
+        <p className={`text-amber mt-2 text-center text-sm font-bold ${isPaused ? 'opacity-10' : ''}`}>
+          {`${AR.play.answerLabel}: ${question.answer}`}
+        </p>
+
+        {isPaused ? (
+          <p className="text-amber mt-3 text-center text-lg font-black">{AR.play.paused}</p>
+        ) : (
+          <div className="mt-4">
+            {bellPhase === 'idle' ? (
+              <div className="flex flex-col gap-2.5">
+                <p className="text-txt2 text-center text-sm font-semibold">{AR.play.bellReadFirst}</p>
+                <Button onClick={armBell}>{AR.play.bellArm}</Button>
+              </div>
+            ) : null}
+
+            {bellPhase === 'armed' ? (
+              <div className="flex flex-col gap-2.5">
+                <p className="text-accent animate-pulse text-center text-sm font-bold">
+                  {AR.play.bellArmedHint}
+                </p>
+                <Button variant="secondary" onClick={bellNoOne}>
+                  {AR.play.noOne}
+                </Button>
+              </div>
+            ) : null}
+
+            {bellPhase === 'buzzed' || bellPhase === 'steal' ? (
+              <div className="flex flex-col gap-2.5">
+                <p
+                  className="text-center text-lg font-black"
+                  style={{ color: buzzedTeam != null ? PLAYER_COLORS[buzzedTeam] : undefined }}
+                >
+                  {bellPhase === 'steal' ? AR.play.bellSteal(buzzedName) : AR.play.bellBuzzed(buzzedName)}
+                </p>
+                <p className="text-txt2 text-center text-sm font-bold">{AR.play.bellWasCorrect}</p>
+                <div className="flex gap-2.5">
+                  <Button variant="danger" className="flex-1" onClick={() => bellJudge(false)}>
+                    {`✗ ${AR.play.wrong}`}
+                  </Button>
+                  <Button className="flex-1" onClick={() => bellJudge(true)}>
+                    {`✓ ${AR.play.correct}`}
+                  </Button>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        )}
+      </div>
+
+      <BellZone
+        team={0}
+        name={names[0]}
+        active={zoneActive}
+        highlighted={buzzedTeam === 0}
+        onTap={() => buzz(0)}
+      />
+    </main>
   );
 }
 

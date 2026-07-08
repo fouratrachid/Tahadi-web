@@ -29,14 +29,12 @@ export function whoAmIPoints(hintsRevealed: number): number {
 
 /** Number of shared/turn steps or questions expected per round, by challenge. */
 export const ROUND_PLAN = {
-  /** Timed rapid-fire pool size selected per player turn.
-   *  2 * poolPerTurn must not exceed the per-pack minimum so the two turns
-   *  never draw overlapping questions (speed min 60, reversed min 40). */
+  /** Timed rapid-fire pool size selected per player turn. */
   speed: { timed: true as const, poolPerTurn: 30 },
-  reversed: { timed: true as const, poolPerTurn: 20 },
-  /** Untimed, referee-paced: total questions across both players. */
-  whoAmI: { timed: false as const, total: 6, perPlayer: 3 },
-  ordering: { timed: false as const, total: 6, perPlayer: 3 },
-  /** Shared head-to-head questions. */
+  /** Untimed, referee-paced, shared: any team may answer. */
+  reversed: { timed: false as const, total: 10 },
+  whoAmI: { timed: false as const, total: 6 },
+  ordering: { timed: false as const, total: 6 },
+  /** Shared head-to-head questions (tabletop buzzer). */
   bell: { timed: false as const, total: 8 },
 } as const;

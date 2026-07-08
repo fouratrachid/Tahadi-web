@@ -6,6 +6,12 @@
  * All game logic lives here; components are presentational. Illegal transitions
  * are no-ops. Timing is timestamp-based (turnEndsAt), so pause/resume and tab
  * switches are exact and drift-free.
+ *
+ * Only `speed` is a timed per-team turn. Every other challenge (whoAmI,
+ * ordering, reversed, bell) presents shared questions: either team may answer,
+ * and the referee credits whichever team actually answered. `bell` additionally
+ * runs a tabletop buzzer sub-state machine (bellPhase/bellBuzzer) so the phone
+ * can be laid flat between the two teams.
  */
 
 import { create } from 'zustand';
@@ -27,6 +33,9 @@ import type {
   UsedIdsByPack,
 } from '@/types';
 
+/** Tabletop buzzer sub-state for the bell challenge. */
+export type BellPhase = 'idle' | 'armed' | 'buzzed' | 'steal';
+
 interface GameState {
   phase: Phase;
   config: GameConfig | null;
@@ -34,14 +43,17 @@ interface GameState {
   roundIndex: number;
   roundStartScores: [number, number];
 
-  timedTurns: [Question[], Question[]] | null; // speed / reversed
-  steps: Step[] | null; // whoAmI / ordering / bell
+  timedTurns: [Question[], Question[]] | null; // speed only
+  steps: Step[] | null; // whoAmI / ordering / reversed / bell (all shared)
 
-  turnPlayer: PlayerIndex;
+  turnPlayer: PlayerIndex; // speed only
   qIndex: number;
 
   revealedHints: number;
   orderingRevealed: boolean;
+
+  bellPhase: BellPhase;
+  bellBuzzer: PlayerIndex | null;
 
   turnEndsAt: number | null;
   pausedRemainingMs: number | null;
@@ -54,14 +66,18 @@ interface GameState {
 
   configureGame: (config: GameConfig) => boolean;
   startRound: () => void;
-  startTurn: (player: PlayerIndex) => void;
-  answerCorrect: () => void;
-  answerWrong: () => void;
-  skipQuestion: () => void;
+  startTurn: (player: PlayerIndex) => void; // speed only
+  answerCorrect: () => void; // speed only
+  awardCorrect: (team: PlayerIndex) => void; // whoAmI / ordering / reversed
+  answerWrong: () => void; // speed / whoAmI / ordering / reversed
+  skipQuestion: () => void; // speed / whoAmI / ordering / reversed
   revealHint: () => void;
   revealOrder: () => void;
-  awardBell: (player: PlayerIndex | null) => void;
-  endTurn: () => void;
+  armBell: () => void;
+  buzz: (team: PlayerIndex) => void;
+  bellJudge: (correct: boolean) => void;
+  bellNoOne: () => void;
+  endTurn: () => void; // speed only
   endRound: () => void;
   nextRound: () => void;
   endGame: () => void;
@@ -91,6 +107,10 @@ function addScore(
   const next: [number, number] = [scores[0], scores[1]];
   next[player] += points;
   return next;
+}
+
+function otherPlayer(player: PlayerIndex): PlayerIndex {
+  return player === 0 ? 1 : 0;
 }
 
 function genId(): string {
@@ -151,20 +171,14 @@ function buildRound(
   let timedTurns: [Question[], Question[]] | null = null;
   let steps: Step[] | null = null;
 
-  if (challenge === 'speed' || challenge === 'reversed') {
-    const perTurn = ROUND_PLAN[challenge].poolPerTurn;
+  if (challenge === 'speed') {
+    const perTurn = ROUND_PLAN.speed.poolPerTurn;
     timedTurns = [draw(perTurn), draw(perTurn)];
-  } else if (challenge === 'bell') {
-    const questions = draw(ROUND_PLAN.bell.total);
-    steps = questions.map((question) => ({ player: null, question }));
   } else {
-    // whoAmI / ordering: alternate players so each gets an equal share.
+    // whoAmI / ordering / reversed / bell: shared questions, either team answers.
     const total = ROUND_PLAN[challenge].total;
     const questions = draw(total);
-    steps = questions.map((question, i) => ({
-      player: (i % 2) as PlayerIndex,
-      question,
-    }));
+    steps = questions.map((question) => ({ player: null, question }));
   }
 
   return {
@@ -174,6 +188,8 @@ function buildRound(
     qIndex: 0,
     revealedHints: 1,
     orderingRevealed: false,
+    bellPhase: 'idle',
+    bellBuzzer: null,
     usedIds,
     sessionUsed,
     roundStartScores: [state.scores[0], state.scores[1]],
@@ -203,14 +219,16 @@ function advanceTimedPartial(state: GameState): Partial<GameState> {
 
 function advanceStepPartial(state: GameState): Partial<GameState> {
   const total = state.steps?.length ?? 0;
+  const reset = { revealedHints: 1, orderingRevealed: false, bellPhase: 'idle' as BellPhase, bellBuzzer: null };
   if (state.qIndex + 1 < total) {
-    return { qIndex: state.qIndex + 1, revealedHints: 1, orderingRevealed: false };
+    return { qIndex: state.qIndex + 1, ...reset };
   }
   return {
     phase: 'roundResult',
     turnEndsAt: null,
     pausedRemainingMs: null,
     isPaused: false,
+    ...reset,
   };
 }
 
@@ -240,6 +258,8 @@ export const useGameStore = create<GameState>((set, get) => {
     qIndex: 0,
     revealedHints: 1,
     orderingRevealed: false,
+    bellPhase: 'idle',
+    bellBuzzer: null,
     turnEndsAt: null,
     pausedRemainingMs: null,
     isPaused: false,
@@ -268,7 +288,7 @@ export const useGameStore = create<GameState>((set, get) => {
       const s = get();
       if (s.phase !== 'roundIntro' || !s.config) return;
       const challenge = challengeOf(s.config, s.roundIndex);
-      if (challenge === 'speed' || challenge === 'reversed') {
+      if (challenge === 'speed') {
         set({
           phase: 'playing',
           turnPlayer: 0,
@@ -278,7 +298,7 @@ export const useGameStore = create<GameState>((set, get) => {
           pausedRemainingMs: null,
         });
       } else {
-        set({ phase: 'playing', qIndex: 0 });
+        set({ phase: 'playing', qIndex: 0, bellPhase: 'idle', bellBuzzer: null });
       }
     },
 
@@ -286,8 +306,7 @@ export const useGameStore = create<GameState>((set, get) => {
       const s = get();
       if (s.phase !== 'playing' && s.phase !== 'betweenTurns') return;
       if (!s.config) return;
-      const challenge = challengeOf(s.config, s.roundIndex);
-      if (challenge !== 'speed' && challenge !== 'reversed') return;
+      if (challengeOf(s.config, s.roundIndex) !== 'speed') return;
       set({
         phase: 'playing',
         turnPlayer: player,
@@ -301,24 +320,25 @@ export const useGameStore = create<GameState>((set, get) => {
     answerCorrect: () => {
       const s = get();
       if (s.phase !== 'playing' || !s.config) return;
+      if (challengeOf(s.config, s.roundIndex) !== 'speed') return;
+      const scores = addScore(s.scores, s.turnPlayer, CORRECT_POINTS.speed);
+      const partial = { scores, ...advanceTimedPartial({ ...s, scores }) };
+      playSound('correct');
+      hapticSuccess();
+      commit(partial, s.phase);
+    },
+
+    awardCorrect: (team) => {
+      const s = get();
+      if (s.phase !== 'playing' || !s.config) return;
       const challenge = challengeOf(s.config, s.roundIndex);
-      let partial: Partial<GameState>;
-      if (challenge === 'speed' || challenge === 'reversed') {
-        const scores = addScore(s.scores, s.turnPlayer, CORRECT_POINTS[challenge]);
-        partial = { scores, ...advanceTimedPartial({ ...s, scores }) };
-      } else if (challenge === 'whoAmI') {
-        const player = s.steps?.[s.qIndex].player;
-        if (player == null) return;
-        const scores = addScore(s.scores, player, whoAmIPoints(s.revealedHints));
-        partial = { scores, ...advanceStepPartial(s) };
-      } else if (challenge === 'ordering') {
-        const player = s.steps?.[s.qIndex].player;
-        if (player == null) return;
-        const scores = addScore(s.scores, player, CORRECT_POINTS.ordering);
-        partial = { scores, ...advanceStepPartial(s) };
-      } else {
-        return; // bell uses awardBell
-      }
+      let points: number;
+      if (challenge === 'whoAmI') points = whoAmIPoints(s.revealedHints);
+      else if (challenge === 'ordering') points = CORRECT_POINTS.ordering;
+      else if (challenge === 'reversed') points = CORRECT_POINTS.reversed;
+      else return; // bell uses bellJudge
+      const scores = addScore(s.scores, team, points);
+      const partial = { scores, ...advanceStepPartial(s) };
       playSound('correct');
       hapticSuccess();
       commit(partial, s.phase);
@@ -329,9 +349,9 @@ export const useGameStore = create<GameState>((set, get) => {
       if (s.phase !== 'playing' || !s.config) return;
       const challenge = challengeOf(s.config, s.roundIndex);
       let partial: Partial<GameState>;
-      if (challenge === 'speed' || challenge === 'reversed') {
+      if (challenge === 'speed') {
         partial = advanceTimedPartial(s);
-      } else if (challenge === 'whoAmI' || challenge === 'ordering') {
+      } else if (challenge === 'whoAmI' || challenge === 'ordering' || challenge === 'reversed') {
         partial = advanceStepPartial(s);
       } else {
         return;
@@ -346,9 +366,9 @@ export const useGameStore = create<GameState>((set, get) => {
       if (s.phase !== 'playing' || !s.config) return;
       const challenge = challengeOf(s.config, s.roundIndex);
       let partial: Partial<GameState>;
-      if (challenge === 'speed' || challenge === 'reversed') {
+      if (challenge === 'speed') {
         partial = advanceTimedPartial(s);
-      } else if (challenge === 'whoAmI' || challenge === 'ordering') {
+      } else if (challenge === 'whoAmI' || challenge === 'ordering' || challenge === 'reversed') {
         partial = advanceStepPartial(s);
       } else {
         return;
@@ -374,26 +394,66 @@ export const useGameStore = create<GameState>((set, get) => {
       set({ orderingRevealed: true });
     },
 
-    awardBell: (player) => {
+    armBell: () => {
       const s = get();
       if (s.phase !== 'playing' || !s.config) return;
       if (challengeOf(s.config, s.roundIndex) !== 'bell') return;
-      let scores = s.scores;
-      if (player != null) {
-        scores = addScore(s.scores, player, CORRECT_POINTS.bell);
+      if (s.bellPhase !== 'idle') return;
+      hapticSelect();
+      set({ bellPhase: 'armed', bellBuzzer: null });
+    },
+
+    buzz: (team) => {
+      const s = get();
+      if (s.phase !== 'playing' || !s.config) return;
+      if (challengeOf(s.config, s.roundIndex) !== 'bell') return;
+      // Phase gate makes the second tap a no-op — first tap wins the buzzer.
+      if (s.bellPhase !== 'armed') return;
+      playSound('tick');
+      hapticSelect();
+      set({ bellPhase: 'buzzed', bellBuzzer: team });
+    },
+
+    bellJudge: (correct) => {
+      const s = get();
+      if (s.phase !== 'playing' || !s.config) return;
+      if (challengeOf(s.config, s.roundIndex) !== 'bell') return;
+      if (s.bellPhase !== 'buzzed' && s.bellPhase !== 'steal') return;
+      const team = s.bellBuzzer;
+      if (team == null) return;
+
+      if (correct) {
+        const scores = addScore(s.scores, team, CORRECT_POINTS.bell);
         playSound('correct');
         hapticSuccess();
-      } else {
-        hapticLight();
+        commit({ scores, ...advanceStepPartial(s) }, s.phase);
+        return;
       }
-      commit({ scores, ...advanceStepPartial(s) }, s.phase);
+
+      playSound('wrong');
+      hapticError();
+      if (s.bellPhase === 'buzzed') {
+        // First answer was wrong: offer the other team a steal attempt.
+        set({ bellPhase: 'steal', bellBuzzer: otherPlayer(team) });
+        return;
+      }
+      // Steal attempt was also wrong: nobody scores, move on.
+      commit(advanceStepPartial(s), s.phase);
+    },
+
+    bellNoOne: () => {
+      const s = get();
+      if (s.phase !== 'playing' || !s.config) return;
+      if (challengeOf(s.config, s.roundIndex) !== 'bell') return;
+      if (s.bellPhase !== 'armed') return;
+      hapticLight();
+      commit(advanceStepPartial(s), s.phase);
     },
 
     endTurn: () => {
       const s = get();
       if (s.phase !== 'playing' || !s.config) return;
-      const challenge = challengeOf(s.config, s.roundIndex);
-      if (challenge !== 'speed' && challenge !== 'reversed') return;
+      if (challengeOf(s.config, s.roundIndex) !== 'speed') return;
       const partial = endTurnPartial(s);
       if (partial.phase === 'betweenTurns') playSound('timeUp');
       commit(partial, s.phase);
@@ -474,6 +534,8 @@ export const useGameStore = create<GameState>((set, get) => {
         qIndex: 0,
         revealedHints: 1,
         orderingRevealed: false,
+        bellPhase: 'idle',
+        bellBuzzer: null,
         turnEndsAt: null,
         pausedRemainingMs: null,
         isPaused: false,
@@ -510,8 +572,7 @@ export function selectChallenge(s: GameState): ChallengeType | null {
 }
 
 export function selectIsTimed(s: GameState): boolean {
-  const c = selectChallenge(s);
-  return c === 'speed' || c === 'reversed';
+  return selectChallenge(s) === 'speed';
 }
 
 export function selectCurrentQuestion(s: GameState): Question | null {
@@ -522,8 +583,12 @@ export function selectCurrentQuestion(s: GameState): Question | null {
 }
 
 export function selectActivePlayer(s: GameState): PlayerIndex | null {
-  if (selectIsTimed(s)) return s.turnPlayer;
-  return s.steps?.[s.qIndex]?.player ?? null;
+  const challenge = selectChallenge(s);
+  if (challenge === 'speed') return s.turnPlayer;
+  if (challenge === 'bell' && (s.bellPhase === 'buzzed' || s.bellPhase === 'steal')) {
+    return s.bellBuzzer;
+  }
+  return null;
 }
 
 export function selectProgress(s: GameState): { index: number; total: number } {

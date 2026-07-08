@@ -68,7 +68,7 @@ export function SettingsScreen({ nav }: { nav: Nav }) {
 
       <section className="border-line bg-surface mt-5 rounded-2xl border p-5 text-center">
         <p className="text-txt2 text-sm">{AR.settings.about}</p>
-        <p className="text-txt3 mt-2 text-xs">{`${AR.settings.version} ١٫٠٫٠`}</p>
+        <p className="text-txt3 mt-2 text-xs">{`${AR.settings.version} 1.0.0`}</p>
       </section>
     </main>
   );
