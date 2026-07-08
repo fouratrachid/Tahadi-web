@@ -8,7 +8,7 @@ import type { Category, ChallengeType } from '@/types';
 export const AR = {
   appName: 'قهوة الحران',
   appNameEn: 'CHALLENGE',
-  tagline: 'تحدّي المعرفة من طاولتنا في قهوة الحران',
+  tagline: 'الرجلة بحر و العوامة قلال',
 
   // Home
   home: {
