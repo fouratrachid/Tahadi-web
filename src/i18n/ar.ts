@@ -76,6 +76,10 @@ export const AR = {
     anime: 'أنمي',
     movies: 'أفلام',
     general: 'منوعات عامة',
+    religion: 'أسئلة دينية',
+    geography: 'جغرافيا',
+    history: 'تاريخ وسياسة',
+    tunisia: 'أسئلة حول تونس',
   } satisfies Record<Category, string>,
 
   // Round intro

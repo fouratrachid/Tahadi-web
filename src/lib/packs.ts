@@ -5,7 +5,16 @@
 
 import type { Category, ChallengeType, Question } from '@/types';
 
-export const CATEGORIES: Category[] = ['football', 'anime', 'movies', 'general'];
+export const CATEGORIES: Category[] = [
+  'football',
+  'anime',
+  'movies',
+  'general',
+  'religion',
+  'geography',
+  'history',
+  'tunisia',
+];
 export const CHALLENGE_TYPES: ChallengeType[] = [
   'speed',
   'whoAmI',

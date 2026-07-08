@@ -3,7 +3,15 @@
  * The Question shape matches the bundled pack JSON files in assets/packs.
  */
 
-export type Category = 'football' | 'anime' | 'movies' | 'general';
+export type Category =
+  | 'football'
+  | 'anime'
+  | 'movies'
+  | 'general'
+  | 'religion'
+  | 'geography'
+  | 'history'
+  | 'tunisia';
 
 export type ChallengeType = 'speed' | 'whoAmI' | 'reversed' | 'ordering' | 'bell';
 
