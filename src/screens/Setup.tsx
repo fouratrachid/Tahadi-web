@@ -10,8 +10,8 @@ import { useGameStore } from '@/store/gameStore';
 import type { Category, ChallengeType, TimerSeconds } from '@/types';
 
 const TIMERS: TimerSeconds[] = [15, 30, 45, 60];
-const MAX_CATEGORIES = 3;
-const REQUIRED_CHALLENGES = 4;
+const MAX_CATEGORIES = CATEGORIES.length;
+const MAX_CHALLENGES = CHALLENGE_TYPES.length;
 
 function Chip({
   label,
@@ -71,7 +71,7 @@ export function SetupScreen({ nav }: { nav: Nav }) {
     hapticSelect();
     setChallenges((prev) => {
       if (prev.includes(ch)) return prev.filter((c) => c !== ch);
-      if (prev.length >= REQUIRED_CHALLENGES) return prev;
+      if (prev.length >= MAX_CHALLENGES) return prev;
       return [...prev, ch];
     });
   };
@@ -85,7 +85,7 @@ export function SetupScreen({ nav }: { nav: Nav }) {
       setError(AR.setup.errCategories);
       return;
     }
-    if (challenges.length !== REQUIRED_CHALLENGES) {
+    if (challenges.length < 1) {
       setError(AR.setup.errChallenges);
       return;
     }

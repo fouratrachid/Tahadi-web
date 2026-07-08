@@ -420,16 +420,18 @@ function BellZone({
   name: string;
   active: boolean;
   highlighted: boolean;
-  onTap: () => void;
+  onTap: (timeStamp: number) => void;
   rotated?: boolean;
 }) {
   const color = PLAYER_COLORS[team];
   const lit = active || highlighted;
   return (
     <button
-      onClick={onTap}
+      // pointerdown (not click): simultaneous two-finger taps fire one event per
+      // finger with sub-ms timestamps, while click may never fire for multi-touch.
+      onPointerDown={(e) => onTap(e.timeStamp)}
       disabled={!active}
-      className={`flex min-h-[25dvh] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-4 transition active:scale-[0.98] disabled:cursor-default ${
+      className={`flex min-h-[25dvh] flex-1 cursor-pointer touch-none flex-col items-center justify-center gap-2 rounded-2xl border-4 transition select-none active:scale-[0.98] disabled:cursor-default ${
         rotated ? 'rotate-180' : ''
       }`}
       style={{
@@ -479,8 +481,10 @@ function BellArena({
   const buzz = useGameStore((s) => s.buzz);
   const bellJudge = useGameStore((s) => s.bellJudge);
   const bellNoOne = useGameStore((s) => s.bellNoOne);
+  const skipQuestion = useGameStore((s) => s.skipQuestion);
 
   const zoneActive = bellPhase === 'armed' && !isPaused;
+  const questionHidden = bellPhase === 'armed';
   const buzzedTeam = bellPhase === 'buzzed' || bellPhase === 'steal' ? bellBuzzer : null;
   const buzzedName = buzzedTeam != null ? names[buzzedTeam] : '';
 
@@ -491,7 +495,7 @@ function BellArena({
         name={names[1]}
         active={zoneActive}
         highlighted={buzzedTeam === 1}
-        onTap={() => buzz(1)}
+        onTap={(ts) => buzz(1, ts)}
         rotated
       />
 
@@ -513,12 +517,24 @@ function BellArena({
           </span>
         </div>
 
-        <p className={`mt-3 text-center text-lg font-bold sm:text-xl ${isPaused ? 'opacity-10' : ''}`}>
-          {question.text}
-        </p>
-        <p className={`text-amber mt-2 text-center text-sm font-bold ${isPaused ? 'opacity-10' : ''}`}>
-          {`${AR.play.answerLabel}: ${question.answer}`}
-        </p>
+        {questionHidden ? (
+          <p className="text-txt3 mt-3 text-center text-lg font-bold sm:text-xl">
+            {AR.play.bellHidden}
+          </p>
+        ) : (
+          <>
+            <p
+              className={`mt-3 text-center text-lg font-bold sm:text-xl ${isPaused ? 'opacity-10' : ''}`}
+            >
+              {question.text}
+            </p>
+            <p
+              className={`text-amber mt-2 text-center text-sm font-bold ${isPaused ? 'opacity-10' : ''}`}
+            >
+              {`${AR.play.answerLabel}: ${question.answer}`}
+            </p>
+          </>
+        )}
 
         {isPaused ? (
           <p className="text-amber mt-3 text-center text-lg font-black">{AR.play.paused}</p>
@@ -528,6 +544,9 @@ function BellArena({
               <div className="flex flex-col gap-2.5">
                 <p className="text-txt2 text-center text-sm font-semibold">{AR.play.bellReadFirst}</p>
                 <Button onClick={armBell}>{AR.play.bellArm}</Button>
+                <Button variant="ghost" onClick={skipQuestion}>
+                  {AR.play.skip}
+                </Button>
               </div>
             ) : null}
 
@@ -536,9 +555,14 @@ function BellArena({
                 <p className="text-accent animate-pulse text-center text-sm font-bold">
                   {AR.play.bellArmedHint}
                 </p>
-                <Button variant="secondary" onClick={bellNoOne}>
-                  {AR.play.noOne}
-                </Button>
+                <div className="flex gap-2.5">
+                  <Button variant="secondary" className="flex-1" onClick={bellNoOne}>
+                    {AR.play.noOne}
+                  </Button>
+                  <Button variant="ghost" className="flex-1" onClick={skipQuestion}>
+                    {AR.play.skip}
+                  </Button>
+                </div>
               </div>
             ) : null}
 
@@ -570,7 +594,7 @@ function BellArena({
         name={names[0]}
         active={zoneActive}
         highlighted={buzzedTeam === 0}
-        onTap={() => buzz(0)}
+        onTap={(ts) => buzz(0, ts)}
       />
     </main>
   );

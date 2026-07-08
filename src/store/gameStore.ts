@@ -17,7 +17,7 @@
 import { create } from 'zustand';
 
 import { hapticError, hapticLight, hapticSelect, hapticSuccess } from '@/lib/haptics';
-import { getPool, packKey } from '@/lib/packs';
+import { CATEGORIES, CHALLENGE_TYPES, getPool, packKey } from '@/lib/packs';
 import { selectQuestions } from '@/lib/questionSelector';
 import { CORRECT_POINTS, ROUND_PLAN, whoAmIPoints } from '@/lib/scoring';
 import { playSound } from '@/lib/soundManager';
@@ -54,6 +54,8 @@ interface GameState {
 
   bellPhase: BellPhase;
   bellBuzzer: PlayerIndex | null;
+  /** High-res timestamp of the winning tap — later events with an earlier stamp steal the buzzer. */
+  bellBuzzTime: number | null;
 
   turnEndsAt: number | null;
   pausedRemainingMs: number | null;
@@ -70,11 +72,11 @@ interface GameState {
   answerCorrect: () => void; // speed only
   awardCorrect: (team: PlayerIndex) => void; // whoAmI / ordering / reversed
   answerWrong: () => void; // speed / whoAmI / ordering / reversed
-  skipQuestion: () => void; // speed / whoAmI / ordering / reversed
+  skipQuestion: () => void; // every challenge
   revealHint: () => void;
   revealOrder: () => void;
   armBell: () => void;
-  buzz: (team: PlayerIndex) => void;
+  buzz: (team: PlayerIndex, timeStamp: number) => void;
   bellJudge: (correct: boolean) => void;
   bellNoOne: () => void;
   endTurn: () => void; // speed only
@@ -93,8 +95,9 @@ const TIMER_VALUES = [15, 30, 45, 60];
 function validateConfig(c: GameConfig): boolean {
   if (!c || !Array.isArray(c.players) || c.players.length !== 2) return false;
   if (!c.players[0]?.trim() || !c.players[1]?.trim()) return false;
-  if (c.categories.length < 1 || c.categories.length > 3) return false;
-  if (c.challenges.length !== 4 || new Set(c.challenges).size !== 4) return false;
+  if (c.categories.length < 1 || c.categories.length > CATEGORIES.length) return false;
+  if (c.challenges.length < 1 || c.challenges.length > CHALLENGE_TYPES.length) return false;
+  if (new Set(c.challenges).size !== c.challenges.length) return false;
   if (!TIMER_VALUES.includes(c.timerSec)) return false;
   return true;
 }
@@ -190,6 +193,7 @@ function buildRound(
     orderingRevealed: false,
     bellPhase: 'idle',
     bellBuzzer: null,
+    bellBuzzTime: null,
     usedIds,
     sessionUsed,
     roundStartScores: [state.scores[0], state.scores[1]],
@@ -219,7 +223,13 @@ function advanceTimedPartial(state: GameState): Partial<GameState> {
 
 function advanceStepPartial(state: GameState): Partial<GameState> {
   const total = state.steps?.length ?? 0;
-  const reset = { revealedHints: 1, orderingRevealed: false, bellPhase: 'idle' as BellPhase, bellBuzzer: null };
+  const reset = {
+    revealedHints: 1,
+    orderingRevealed: false,
+    bellPhase: 'idle' as BellPhase,
+    bellBuzzer: null,
+    bellBuzzTime: null,
+  };
   if (state.qIndex + 1 < total) {
     return { qIndex: state.qIndex + 1, ...reset };
   }
@@ -260,6 +270,7 @@ export const useGameStore = create<GameState>((set, get) => {
     orderingRevealed: false,
     bellPhase: 'idle',
     bellBuzzer: null,
+    bellBuzzTime: null,
     turnEndsAt: null,
     pausedRemainingMs: null,
     isPaused: false,
@@ -298,7 +309,7 @@ export const useGameStore = create<GameState>((set, get) => {
           pausedRemainingMs: null,
         });
       } else {
-        set({ phase: 'playing', qIndex: 0, bellPhase: 'idle', bellBuzzer: null });
+        set({ phase: 'playing', qIndex: 0, bellPhase: 'idle', bellBuzzer: null, bellBuzzTime: null });
       }
     },
 
@@ -365,14 +376,8 @@ export const useGameStore = create<GameState>((set, get) => {
       const s = get();
       if (s.phase !== 'playing' || !s.config) return;
       const challenge = challengeOf(s.config, s.roundIndex);
-      let partial: Partial<GameState>;
-      if (challenge === 'speed') {
-        partial = advanceTimedPartial(s);
-      } else if (challenge === 'whoAmI' || challenge === 'ordering' || challenge === 'reversed') {
-        partial = advanceStepPartial(s);
-      } else {
-        return;
-      }
+      const partial =
+        challenge === 'speed' ? advanceTimedPartial(s) : advanceStepPartial(s);
       hapticLight();
       commit(partial, s.phase);
     },
@@ -400,18 +405,29 @@ export const useGameStore = create<GameState>((set, get) => {
       if (challengeOf(s.config, s.roundIndex) !== 'bell') return;
       if (s.bellPhase !== 'idle') return;
       hapticSelect();
-      set({ bellPhase: 'armed', bellBuzzer: null });
+      set({ bellPhase: 'armed', bellBuzzer: null, bellBuzzTime: null });
     },
 
-    buzz: (team) => {
+    buzz: (team, timeStamp) => {
       const s = get();
       if (s.phase !== 'playing' || !s.config) return;
       if (challengeOf(s.config, s.roundIndex) !== 'bell') return;
-      // Phase gate makes the second tap a no-op — first tap wins the buzzer.
-      if (s.bellPhase !== 'armed') return;
-      playSound('tick');
-      hapticSelect();
-      set({ bellPhase: 'buzzed', bellBuzzer: team });
+      if (s.bellPhase === 'armed') {
+        playSound('tick');
+        hapticSelect();
+        set({ bellPhase: 'buzzed', bellBuzzer: team, bellBuzzTime: timeStamp });
+        return;
+      }
+      // Near-simultaneous taps arrive as separate pointerdown events; if the
+      // other team's tap carries an earlier timestamp, it wins the buzzer.
+      if (
+        s.bellPhase === 'buzzed' &&
+        s.bellBuzzer !== team &&
+        s.bellBuzzTime != null &&
+        timeStamp < s.bellBuzzTime
+      ) {
+        set({ bellBuzzer: team, bellBuzzTime: timeStamp });
+      }
     },
 
     bellJudge: (correct) => {
@@ -536,6 +552,7 @@ export const useGameStore = create<GameState>((set, get) => {
         orderingRevealed: false,
         bellPhase: 'idle',
         bellBuzzer: null,
+        bellBuzzTime: null,
         turnEndsAt: null,
         pausedRemainingMs: null,
         isPaused: false,

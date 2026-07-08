@@ -25,8 +25,8 @@ export const AR = {
     player1: 'اللاعب الأول',
     player2: 'اللاعب الثاني',
     playerPlaceholder: 'اكتب الاسم',
-    categoriesTitle: 'الفئات (اختر من 1 إلى 3)',
-    challengesTitle: 'أنواع التحديات (اختر 4 بالترتيب)',
+    categoriesTitle: 'الفئات (اختر من 1 إلى 8)',
+    challengesTitle: 'أنواع التحديات (اختر من 1 إلى 5)',
     timerTitle: 'مدة المؤقّت',
     seconds: 'ثانية',
     start: 'ابدأ اللعبة',
@@ -34,7 +34,7 @@ export const AR = {
     selectedCount: (n: number) => `${toAr(n)} مختارة`,
     errNames: 'اكتب اسمي اللاعبين',
     errCategories: 'اختر فئة واحدة على الأقل',
-    errChallenges: 'اختر 4 تحديات بالضبط',
+    errChallenges: 'اختر تحدياً واحداً على الأقل',
   },
 
   // Challenge names + referee rules text
@@ -67,7 +67,7 @@ export const AR = {
       name: 'الجرس',
       short: 'اضغط أولاً وأجب',
       rules:
-        'ضع الهاتف على الطاولة بين الفريقين، بحيث تكون منطقة كل فريق أمامه. اقرأ السؤال بصوتٍ عالٍ ثم افتح الجرس. أول فريق يضغط على منطقته يحصل على فرصة الإجابة (+10). إذا أخطأ، تنتقل الفرصة للفريق الآخر للخطف. ثمانية أسئلة.',
+        'ضع الهاتف على الطاولة بين الفريقين، بحيث تكون منطقة كل فريق أمامه. اقرأ السؤال بصوتٍ عالٍ ثم افتح الجرس — عندها يُخفى السؤال عن الشاشة. أول فريق يضغط على منطقته يحصل على فرصة الإجابة (+10). إذا أخطأ، تنتقل الفرصة للفريق الآخر للخطف. ثمانية أسئلة.',
     },
   } satisfies Record<ChallengeType, { name: string; short: string; rules: string }>,
 
@@ -116,6 +116,7 @@ export const AR = {
     bellArm: 'افتح الجرس',
     bellArmedHint: 'الجرس مفتوح — بانتظار الضغط',
     bellTapZone: 'اضغط هنا',
+    bellHidden: '🙈 السؤال مخفي — الجرس مفتوح',
     bellBuzzed: (name: string) => `${name} يجيب الآن!`,
     bellWasCorrect: 'هل الإجابة صحيحة؟',
     bellSteal: (name: string) => `فرصة خطف لفريق ${name}`,

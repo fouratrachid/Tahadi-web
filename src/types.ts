@@ -39,9 +39,9 @@ export type TimerSeconds = 15 | 30 | 45 | 60;
 export interface GameConfig {
   /** Two contestant names. The referee holds the phone. */
   players: [string, string];
-  /** 1–3 selected categories. */
+  /** 1–8 selected categories. */
   categories: Category[];
-  /** Exactly 4 challenge types, in the order they will be played. */
+  /** 1–5 unique challenge types, in the order they will be played. */
   challenges: ChallengeType[];
   timerSec: TimerSeconds;
 }
