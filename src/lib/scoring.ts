@@ -38,3 +38,9 @@ export const ROUND_PLAN = {
   /** Shared head-to-head questions (tabletop buzzer). */
   bell: { timed: false as const, total: 8 },
 } as const;
+
+/** Number of *resolved* (non-skipped) questions a steps-based round needs. */
+export function stepsTarget(challenge: ChallengeType): number {
+  const plan = ROUND_PLAN[challenge];
+  return 'total' in plan ? plan.total : 0;
+}

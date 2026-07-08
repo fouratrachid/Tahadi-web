@@ -19,7 +19,7 @@ import { create } from 'zustand';
 import { hapticError, hapticLight, hapticSelect, hapticSuccess } from '@/lib/haptics';
 import { CATEGORIES, CHALLENGE_TYPES, getPool, packKey } from '@/lib/packs';
 import { selectQuestions } from '@/lib/questionSelector';
-import { CORRECT_POINTS, ROUND_PLAN, whoAmIPoints } from '@/lib/scoring';
+import { CORRECT_POINTS, ROUND_PLAN, stepsTarget, whoAmIPoints } from '@/lib/scoring';
 import { playSound } from '@/lib/soundManager';
 import { addHistory, clearUsedIds, loadUsedIds, saveUsedIds } from '@/lib/storage';
 import type {
@@ -48,6 +48,8 @@ interface GameState {
 
   turnPlayer: PlayerIndex; // speed only
   qIndex: number;
+  /** Non-skipped questions resolved so far this round (steps-based challenges only). */
+  stepsResolved: number;
 
   revealedHints: number;
   orderingRevealed: boolean;
@@ -124,6 +126,52 @@ function challengeOf(config: GameConfig, roundIndex: number): ChallengeType {
   return config.challenges[roundIndex];
 }
 
+/**
+ * Draw `count` fresh questions for a pack, updating used-id tracking (session
+ * hard-exclusion + persisted soft-exclusion). Pure: returns new copies, never
+ * mutates its inputs. Used both to seed a round and to top it up mid-round
+ * when skips run past the initially-drawn batch.
+ */
+function drawMore(
+  config: GameConfig,
+  challenge: ChallengeType,
+  count: number,
+  usedIds: UsedIdsByPack,
+  sessionUsed: ReadonlySet<string>,
+): { questions: Question[]; usedIds: UsedIdsByPack; sessionUsed: Set<string> } {
+  const pool = getPool(config.categories, challenge);
+
+  const softUsed = new Set<string>();
+  for (const category of config.categories) {
+    for (const id of usedIds[packKey(category, challenge)] ?? []) softUsed.add(id);
+  }
+
+  const nextSessionUsed = new Set(sessionUsed);
+  const { selected, exhausted } = selectQuestions(
+    pool,
+    count,
+    softUsed,
+    Math.random,
+    nextSessionUsed,
+  );
+
+  const nextUsedIds: UsedIdsByPack = { ...usedIds };
+  if (exhausted) {
+    // Unused questions ran out: reset the persisted used-ids for the packs
+    // in play so future games start fresh.
+    for (const category of config.categories) {
+      nextUsedIds[packKey(category, challenge)] = [];
+    }
+  }
+  for (const q of selected) {
+    nextSessionUsed.add(q.id);
+    const key = packKey(q.category, q.challengeType);
+    nextUsedIds[key] = [...(nextUsedIds[key] ?? []), q.id];
+  }
+
+  return { questions: selected, usedIds: nextUsedIds, sessionUsed: nextSessionUsed };
+}
+
 /** Build the plan (questions + pointers) for a round, updating used-id tracking. */
 function buildRound(
   state: GameState,
@@ -131,57 +179,27 @@ function buildRound(
   roundIndex: number,
 ): Partial<GameState> {
   const challenge = challengeOf(config, roundIndex);
-  const pool = getPool(config.categories, challenge);
 
-  // Hard exclusion: never repeat a question within the current game.
-  const sessionUsed = new Set(state.sessionUsed);
-  const usedIds: UsedIdsByPack = { ...state.usedIds };
-
-  // Soft exclusion: ids used in previous games (persisted per pack).
-  const softUsed = new Set<string>();
-  for (const category of config.categories) {
-    for (const id of usedIds[packKey(category, challenge)] ?? []) softUsed.add(id);
-  }
-
-  const markUsed = (questions: Question[]): void => {
-    for (const q of questions) {
-      sessionUsed.add(q.id);
-      const key = packKey(q.category, q.challengeType);
-      usedIds[key] = [...(usedIds[key] ?? []), q.id];
-    }
-  };
-
-  const draw = (count: number): Question[] => {
-    const { selected, exhausted } = selectQuestions(
-      pool,
-      count,
-      softUsed,
-      Math.random,
-      sessionUsed,
-    );
-    if (exhausted) {
-      // Unused questions ran out: reset the persisted used-ids for the packs
-      // in play so future games start fresh.
-      for (const category of config.categories) {
-        usedIds[packKey(category, challenge)] = [];
-      }
-      softUsed.clear();
-    }
-    markUsed(selected);
-    return selected;
-  };
-
+  let usedIds = state.usedIds;
+  let sessionUsed: ReadonlySet<string> = state.sessionUsed;
   let timedTurns: [Question[], Question[]] | null = null;
   let steps: Step[] | null = null;
 
   if (challenge === 'speed') {
     const perTurn = ROUND_PLAN.speed.poolPerTurn;
-    timedTurns = [draw(perTurn), draw(perTurn)];
+    const turn0 = drawMore(config, challenge, perTurn, usedIds, sessionUsed);
+    usedIds = turn0.usedIds;
+    sessionUsed = turn0.sessionUsed;
+    const turn1 = drawMore(config, challenge, perTurn, usedIds, sessionUsed);
+    usedIds = turn1.usedIds;
+    sessionUsed = turn1.sessionUsed;
+    timedTurns = [turn0.questions, turn1.questions];
   } else {
     // whoAmI / ordering / reversed / bell: shared questions, either team answers.
-    const total = ROUND_PLAN[challenge].total;
-    const questions = draw(total);
-    steps = questions.map((question) => ({ player: null, question }));
+    const draw = drawMore(config, challenge, stepsTarget(challenge), usedIds, sessionUsed);
+    usedIds = draw.usedIds;
+    sessionUsed = draw.sessionUsed;
+    steps = draw.questions.map((question) => ({ player: null, question }));
   }
 
   return {
@@ -189,13 +207,14 @@ function buildRound(
     steps,
     turnPlayer: 0,
     qIndex: 0,
+    stepsResolved: 0,
     revealedHints: 1,
     orderingRevealed: false,
     bellPhase: 'idle',
     bellBuzzer: null,
     bellBuzzTime: null,
     usedIds,
-    sessionUsed,
+    sessionUsed: new Set(sessionUsed),
     roundStartScores: [state.scores[0], state.scores[1]],
     turnEndsAt: null,
     pausedRemainingMs: null,
@@ -213,26 +232,89 @@ function endTurnPartial(state: GameState): Partial<GameState> {
   return { ...common, phase: 'roundResult' as Phase };
 }
 
+/** How many extra speed questions to draw when a skip-heavy turn runs past its pool. */
+const SPEED_EXTEND_BATCH = 5;
+
+// A skip should never end a turn/round early just because the pre-drawn batch
+// ran out — only the timer (speed) or the resolved-count target (steps) may
+// end things. Both helpers below top up from the pool before giving up.
+
 function advanceTimedPartial(state: GameState): Partial<GameState> {
   const turn = state.timedTurns?.[state.turnPlayer] ?? [];
-  if (state.qIndex + 1 < turn.length) {
-    return { qIndex: state.qIndex + 1 };
+  const nextIndex = state.qIndex + 1;
+  if (nextIndex < turn.length) {
+    return { qIndex: nextIndex };
+  }
+  if (state.config) {
+    const challenge = challengeOf(state.config, state.roundIndex);
+    const more = drawMore(state.config, challenge, SPEED_EXTEND_BATCH, state.usedIds, state.sessionUsed);
+    if (more.questions.length > 0) {
+      const timedTurns: [Question[], Question[]] = state.timedTurns
+        ? [[...state.timedTurns[0]], [...state.timedTurns[1]]]
+        : [[], []];
+      timedTurns[state.turnPlayer] = [...timedTurns[state.turnPlayer], ...more.questions];
+      return {
+        qIndex: nextIndex,
+        timedTurns,
+        usedIds: more.usedIds,
+        sessionUsed: more.sessionUsed,
+      };
+    }
   }
   return endTurnPartial(state);
 }
 
-function advanceStepPartial(state: GameState): Partial<GameState> {
-  const total = state.steps?.length ?? 0;
+/**
+ * Advance past the current step. `resolved` is false for skips — skipped
+ * questions don't count toward the round's target, so the round keeps
+ * drawing fresh questions (topping up the pool if needed) until `target`
+ * questions have actually been answered, or the pool truly runs dry.
+ */
+function advanceStepPartial(state: GameState, resolved: boolean): Partial<GameState> {
+  const stepsResolved = state.stepsResolved + (resolved ? 1 : 0);
+  const challenge = state.config ? challengeOf(state.config, state.roundIndex) : null;
+  const target = challenge ? stepsTarget(challenge) : (state.steps?.length ?? 0);
+
   const reset = {
     revealedHints: 1,
     orderingRevealed: false,
     bellPhase: 'idle' as BellPhase,
     bellBuzzer: null,
     bellBuzzTime: null,
+    stepsResolved,
   };
-  if (state.qIndex + 1 < total) {
-    return { qIndex: state.qIndex + 1, ...reset };
+
+  if (stepsResolved >= target) {
+    return {
+      phase: 'roundResult',
+      turnEndsAt: null,
+      pausedRemainingMs: null,
+      isPaused: false,
+      ...reset,
+    };
   }
+
+  const steps = state.steps ?? [];
+  const nextIndex = state.qIndex + 1;
+  if (nextIndex < steps.length) {
+    return { qIndex: nextIndex, ...reset };
+  }
+
+  // Pre-drawn batch exhausted before reaching the target — top it up.
+  if (state.config && challenge) {
+    const more = drawMore(state.config, challenge, 1, state.usedIds, state.sessionUsed);
+    if (more.questions.length > 0) {
+      return {
+        steps: [...steps, { player: null, question: more.questions[0] }],
+        qIndex: nextIndex,
+        usedIds: more.usedIds,
+        sessionUsed: more.sessionUsed,
+        ...reset,
+      };
+    }
+  }
+
+  // Pool truly exhausted: end the round early with whatever was resolved.
   return {
     phase: 'roundResult',
     turnEndsAt: null,
@@ -245,6 +327,9 @@ function advanceStepPartial(state: GameState): Partial<GameState> {
 export const useGameStore = create<GameState>((set, get) => {
   const commit = (partial: Partial<GameState>, prevPhase: Phase): void => {
     set(partial);
+    // Mid-round pool top-ups (skip running past the pre-drawn batch) change
+    // usedIds outside of buildRound — keep localStorage in sync when they do.
+    if (partial.usedIds) persistUsed();
     const next = partial.phase;
     if (next && next !== prevPhase) {
       if (next === 'roundResult') playSound('roundWin');
@@ -266,6 +351,7 @@ export const useGameStore = create<GameState>((set, get) => {
     steps: null,
     turnPlayer: 0,
     qIndex: 0,
+    stepsResolved: 0,
     revealedHints: 1,
     orderingRevealed: false,
     bellPhase: 'idle',
@@ -349,7 +435,7 @@ export const useGameStore = create<GameState>((set, get) => {
       else if (challenge === 'reversed') points = CORRECT_POINTS.reversed;
       else return; // bell uses bellJudge
       const scores = addScore(s.scores, team, points);
-      const partial = { scores, ...advanceStepPartial(s) };
+      const partial = { scores, ...advanceStepPartial(s, true) };
       playSound('correct');
       hapticSuccess();
       commit(partial, s.phase);
@@ -363,7 +449,7 @@ export const useGameStore = create<GameState>((set, get) => {
       if (challenge === 'speed') {
         partial = advanceTimedPartial(s);
       } else if (challenge === 'whoAmI' || challenge === 'ordering' || challenge === 'reversed') {
-        partial = advanceStepPartial(s);
+        partial = advanceStepPartial(s, true);
       } else {
         return;
       }
@@ -377,7 +463,7 @@ export const useGameStore = create<GameState>((set, get) => {
       if (s.phase !== 'playing' || !s.config) return;
       const challenge = challengeOf(s.config, s.roundIndex);
       const partial =
-        challenge === 'speed' ? advanceTimedPartial(s) : advanceStepPartial(s);
+        challenge === 'speed' ? advanceTimedPartial(s) : advanceStepPartial(s, false);
       hapticLight();
       commit(partial, s.phase);
     },
@@ -442,7 +528,7 @@ export const useGameStore = create<GameState>((set, get) => {
         const scores = addScore(s.scores, team, CORRECT_POINTS.bell);
         playSound('correct');
         hapticSuccess();
-        commit({ scores, ...advanceStepPartial(s) }, s.phase);
+        commit({ scores, ...advanceStepPartial(s, true) }, s.phase);
         return;
       }
 
@@ -454,7 +540,7 @@ export const useGameStore = create<GameState>((set, get) => {
         return;
       }
       // Steal attempt was also wrong: nobody scores, move on.
-      commit(advanceStepPartial(s), s.phase);
+      commit(advanceStepPartial(s, true), s.phase);
     },
 
     bellNoOne: () => {
@@ -463,7 +549,7 @@ export const useGameStore = create<GameState>((set, get) => {
       if (challengeOf(s.config, s.roundIndex) !== 'bell') return;
       if (s.bellPhase !== 'armed') return;
       hapticLight();
-      commit(advanceStepPartial(s), s.phase);
+      commit(advanceStepPartial(s, true), s.phase);
     },
 
     endTurn: () => {
@@ -548,6 +634,7 @@ export const useGameStore = create<GameState>((set, get) => {
         steps: null,
         turnPlayer: 0,
         qIndex: 0,
+        stepsResolved: 0,
         revealedHints: 1,
         orderingRevealed: false,
         bellPhase: 'idle',
@@ -612,7 +699,11 @@ export function selectProgress(s: GameState): { index: number; total: number } {
   if (selectIsTimed(s)) {
     return { index: s.qIndex + 1, total: s.timedTurns?.[s.turnPlayer]?.length ?? 0 };
   }
-  return { index: s.qIndex + 1, total: s.steps?.length ?? 0 };
+  // Skipped questions don't advance the count — only resolved ones do, so the
+  // shown progress ("3 / 8") reflects answers, not how many were skipped.
+  const challenge = selectChallenge(s);
+  const total = challenge ? stepsTarget(challenge) : (s.steps?.length ?? 0);
+  return { index: Math.min(s.stepsResolved + 1, total), total };
 }
 
 export function selectRoundDelta(s: GameState): [number, number] {
