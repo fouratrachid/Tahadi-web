@@ -93,6 +93,7 @@ function buildRound(config: ImposterConfig, usedWordIds: string[]): ImposterRoun
     revealIndex: 0,
     revealed: false,
     votes: new Array(n).fill(0),
+    hintOrder: shuffledIndices(n),
     eliminated: null,
     eliminatedIndices: [],
     outcome: null,

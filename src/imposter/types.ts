@@ -57,6 +57,8 @@ export interface ImposterRound {
   revealIndex: number;
   revealed: boolean;
   votes: number[];
+  /** Randomized speaking order for the discussion phase (player indices). */
+  hintOrder: number[];
   /** Most recently eliminated player, for the caught/result screens. */
   eliminated: number | null;
   /** Every player voted out so far this game (double-imposter games may vote more than once). */
