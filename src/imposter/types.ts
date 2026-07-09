@@ -45,6 +45,7 @@ export type ImposterPhase =
   | 'reveal'
   | 'discussion'
   | 'voting'
+  | 'caught'
   | 'result';
 
 export interface ImposterRound {
@@ -55,7 +56,12 @@ export interface ImposterRound {
   revealIndex: number;
   revealed: boolean;
   votes: number[];
+  /** Most recently eliminated player, for the caught/result screens. */
   eliminated: number | null;
+  /** Every player voted out so far this game (double-imposter games may vote more than once). */
+  eliminatedIndices: number[];
+  /** Set once the game reaches a final verdict (phase 'result'). */
+  outcome: 'players' | 'imposter' | null;
 }
 
 export interface ImposterStats {

@@ -28,6 +28,7 @@ interface ImposterState {
   startVoting: () => void;
   castVote: (playerIndex: number) => void;
   finishVoting: () => void;
+  continueVoting: () => void;
   playAgain: () => void;
   changeSettings: () => void;
   backToGames: () => void;
@@ -86,6 +87,8 @@ function buildRound(config: ImposterConfig, usedWordIds: string[]): ImposterRoun
     revealed: false,
     votes: new Array(n).fill(0),
     eliminated: null,
+    eliminatedIndices: [],
+    outcome: null,
   };
 }
 
@@ -134,6 +137,7 @@ export const useImposterStore = create<ImposterState>((set, get) => ({
   castVote: (playerIndex) => {
     const s = get();
     if (s.phase !== 'voting' || !s.round) return;
+    if (s.round.eliminatedIndices.includes(playerIndex)) return;
     const votes = [...s.round.votes];
     votes[playerIndex] += 1;
     hapticSelect();
@@ -147,31 +151,64 @@ export const useImposterStore = create<ImposterState>((set, get) => ({
     let max = -1;
     let eliminated = -1;
     votes.forEach((v, i) => {
-      if (v > max) {
+      if (v > max && !s.round!.eliminatedIndices.includes(i)) {
         max = v;
         eliminated = i;
       }
     });
-    if (eliminated < 0) eliminated = 0;
+    if (eliminated < 0) return;
 
+    const eliminatedIndices = [...s.round.eliminatedIndices, eliminated];
     const eliminatedRole = s.round.roles[eliminated];
     const imposterRoles: Role[] = ['imposter', 'fake'];
     const remainingImposters = s.round.roles.filter(
-      (r, i) => imposterRoles.includes(r) && i !== eliminated,
+      (r, i) => imposterRoles.includes(r) && !eliminatedIndices.includes(i),
     ).length;
-    const playersWon = imposterRoles.includes(eliminatedRole) && remainingImposters === 0;
 
-    playSound(playersWon ? 'gameWin' : 'roundWin');
-    if (playersWon) hapticSuccess();
+    // A normal player being voted out ends the game immediately (they can't
+    // out-vote the imposters twice); catching an imposter only ends the game
+    // once every imposter has been found — otherwise voting continues.
+    if (!imposterRoles.includes(eliminatedRole)) {
+      finish(false, eliminated, eliminatedIndices);
+      return;
+    }
+    if (remainingImposters === 0) {
+      finish(true, eliminated, eliminatedIndices);
+      return;
+    }
 
-    const nextUsedWordIds = [...get().usedWordIds, `${s.round.config.category}:${s.round.word}`];
-    saveUsedWordIds(nextUsedWordIds);
-    recordGame(s.round.config.category === 'random' ? 'general' : s.round.config.category, playersWon);
+    playSound('correct');
+    hapticSuccess();
+    set({ round: { ...s.round, eliminated, eliminatedIndices }, phase: 'caught' });
 
+    function finish(playersWon: boolean, elim: number, elimIndices: number[]): void {
+      playSound(playersWon ? 'gameWin' : 'roundWin');
+      if (playersWon) hapticSuccess();
+      const nextUsedWordIds = [...get().usedWordIds, `${s.round!.config.category}:${s.round!.word}`];
+      saveUsedWordIds(nextUsedWordIds);
+      recordGame(
+        s.round!.config.category === 'random' ? 'general' : s.round!.config.category,
+        playersWon,
+      );
+      set({
+        round: {
+          ...s.round!,
+          eliminated: elim,
+          eliminatedIndices: elimIndices,
+          outcome: playersWon ? 'players' : 'imposter',
+        },
+        usedWordIds: nextUsedWordIds,
+        phase: 'result',
+      });
+    }
+  },
+
+  continueVoting: () => {
+    const s = get();
+    if (s.phase !== 'caught' || !s.round) return;
     set({
-      round: { ...s.round, eliminated },
-      usedWordIds: nextUsedWordIds,
-      phase: 'result',
+      phase: 'voting',
+      round: { ...s.round, votes: new Array(s.round.roles.length).fill(0) },
     });
   },
 
@@ -206,10 +243,6 @@ export function selectCurrentPlayerName(s: ImposterState): string {
 }
 
 export function selectWinner(s: ImposterState): 'players' | 'imposter' | null {
-  if (s.phase !== 'result' || !s.round || s.round.eliminated == null) return null;
-  const role = s.round.roles[s.round.eliminated];
-  const remaining = s.round.roles.filter(
-    (r, i) => (r === 'imposter' || r === 'fake') && i !== s.round!.eliminated,
-  ).length;
-  return (role === 'imposter' || role === 'fake') && remaining === 0 ? 'players' : 'imposter';
+  if (s.phase !== 'result' || !s.round) return null;
+  return s.round.outcome;
 }

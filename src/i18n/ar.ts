@@ -266,6 +266,13 @@ export const AR = {
       subtitle: 'اضغطوا على اللاعب الذي تشكّون فيه، صوتاً واحداً في كل مرة',
       finish: 'إنهاء التصويت',
       votes: (n: number) => `${toAr(n)} صوت`,
+      alreadyOut: (names: string) => `تم طردهم سابقاً: ${names}`,
+    },
+    caught: {
+      eliminated: (name: string) => `تم طرد: ${name}`,
+      wasImposter: 'كان مندساً! 🕵️',
+      subtitle: 'ما زال هناك مندس آخر بينكم — عودوا للنقاش والتصويت',
+      continueVoting: 'متابعة التصويت',
     },
     result: {
       eliminated: (name: string) => `تم طرد: ${name}`,
