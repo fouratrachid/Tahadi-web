@@ -73,6 +73,13 @@ function buildRound(config: ImposterConfig, usedWordIds: string[]): ImposterRoun
   if (config.mode === 'fakeWord') {
     roles[order[0]] = 'fake';
     fakeWord = entry ? pickFakeWord(entry, config.difficulty) : 'كلمة أخرى';
+  } else if (config.mode === 'mixed') {
+    // One classic imposter (no word at all) plus one fake-word player, at once.
+    roles[order[0]] = 'imposter';
+    if (n > 1) {
+      roles[order[1]] = 'fake';
+      fakeWord = entry ? pickFakeWord(entry, config.difficulty) : 'كلمة أخرى';
+    }
   } else {
     const impCount = config.mode === 'double' ? 2 : config.imposterCount;
     for (let i = 0; i < Math.min(impCount, n - 1); i++) roles[order[i]] = 'imposter';

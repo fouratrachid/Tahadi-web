@@ -25,7 +25,8 @@ export interface WordEntry {
   relatedWords: string[];
 }
 
-export type ImposterMode = 'classic' | 'double' | 'fakeWord';
+/** 'mixed' = one classic imposter (doesn't know the word) plus one fake-word player, at the same time. */
+export type ImposterMode = 'classic' | 'double' | 'fakeWord' | 'mixed';
 
 export type Role = 'normal' | 'imposter' | 'fake';
 

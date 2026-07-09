@@ -179,7 +179,7 @@ export function ImposterSetupScreen() {
       {/* Mode */}
       <h2 className="text-accent mt-8 mb-3 text-lg font-bold">{AR.imposter.setup.modeTitle}</h2>
       <div className="flex flex-col gap-2.5">
-        {(['classic', 'double', 'fakeWord'] as const).map((m) => (
+        {(['classic', 'double', 'fakeWord', 'mixed'] as const).map((m) => (
           <button
             key={m}
             onClick={() => {
