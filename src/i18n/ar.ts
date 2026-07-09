@@ -81,6 +81,8 @@ export const AR = {
     geography: 'جغرافيا',
     history: 'تاريخ وسياسة',
     tunisia: 'أسئلة حول تونس',
+    tunisiaSeries: 'مسلسلات تونسية',
+    tunisiaFootball: 'كرة قدم تونسية',
   } satisfies Record<Category, string>,
 
   // Round intro

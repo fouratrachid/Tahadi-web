@@ -14,6 +14,8 @@ export const CATEGORIES: Category[] = [
   'geography',
   'history',
   'tunisia',
+  'tunisiaSeries',
+  'tunisiaFootball',
 ];
 export const CHALLENGE_TYPES: ChallengeType[] = [
   'speed',

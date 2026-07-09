@@ -11,7 +11,9 @@ export type Category =
   | 'religion'
   | 'geography'
   | 'history'
-  | 'tunisia';
+  | 'tunisia'
+  | 'tunisiaSeries'
+  | 'tunisiaFootball';
 
 export type ChallengeType = 'speed' | 'whoAmI' | 'reversed' | 'ordering' | 'bell';
 
