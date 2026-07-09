@@ -1,0 +1,22 @@
+[
+  { "id": "imp-hs-01", "word": "الحرب العالمية الثانية", "difficulty": "medium", "relatedWords": ["الحرب العالمية الأولى", "الحرب الباردة", "حرب فيتنام"] },
+  { "id": "imp-hs-02", "word": "الحضارة الفرعونية", "difficulty": "medium", "relatedWords": ["الحضارة الرومانية", "الحضارة الإغريقية", "الحضارة الفينيقية"] },
+  { "id": "imp-hs-03", "word": "الإمبراطورية الرومانية", "difficulty": "medium", "relatedWords": ["الإمبراطورية العثمانية", "الإمبراطورية الفارسية", "الإمبراطورية البيزنطية"] },
+  { "id": "imp-hs-04", "word": "الفتح الإسلامي", "difficulty": "medium", "relatedWords": ["الحروب الصليبية", "الاستعمار", "الاستقلال"] },
+  { "id": "imp-hs-05", "word": "الاستعمار الفرنسي", "difficulty": "medium", "relatedWords": ["الاستعمار الإيطالي", "الاستعمار البريطاني", "الاستعمار الإسباني"] },
+  { "id": "imp-hs-06", "word": "الملك", "difficulty": "easy", "relatedWords": ["السلطان", "الإمبراطور", "الرئيس"] },
+  { "id": "imp-hs-07", "word": "الأهرامات", "difficulty": "easy", "relatedWords": ["برج بيزا", "سور الصين العظيم", "الكولوسيوم"] },
+  { "id": "imp-hs-08", "word": "سور الصين العظيم", "difficulty": "medium", "relatedWords": ["الأهرامات", "برج إيفل", "تاج محل"] },
+  { "id": "imp-hs-09", "word": "نابليون بونابرت", "difficulty": "medium", "relatedWords": ["يوليوس قيصر", "الإسكندر الأكبر", "صلاح الدين"] },
+  { "id": "imp-hs-10", "word": "صلاح الدين الأيوبي", "difficulty": "medium", "relatedWords": ["نابليون بونابرت", "الإسكندر الأكبر", "طارق بن زياد"] },
+  { "id": "imp-hs-11", "word": "الثورة الفرنسية", "difficulty": "hard", "relatedWords": ["الثورة الصناعية", "الثورة التونسية", "الحرب الأهلية"] },
+  { "id": "imp-hs-12", "word": "الحرب الباردة", "difficulty": "hard", "relatedWords": ["الحرب العالمية الثانية", "حرب الخليج", "الحرب الأهلية"] },
+  { "id": "imp-hs-13", "word": "الاستقلال", "difficulty": "easy", "relatedWords": ["الاستعمار", "الثورة", "التحرير"] },
+  { "id": "imp-hs-14", "word": "المتحف", "difficulty": "easy", "relatedWords": ["المكتبة", "الأثر", "المعبد"] },
+  { "id": "imp-hs-15", "word": "الفرعون", "difficulty": "medium", "relatedWords": ["القيصر", "السلطان", "الملك"] },
+  { "id": "imp-hs-16", "word": "الحرير", "difficulty": "hard", "relatedWords": ["طريق الحرير", "التجارة", "القوافل"] },
+  { "id": "imp-hs-17", "word": "قرطاج القديمة", "difficulty": "medium", "relatedWords": ["روما القديمة", "الإسكندرية القديمة", "أثينا القديمة"] },
+  { "id": "imp-hs-18", "word": "حنبعل", "difficulty": "hard", "relatedWords": ["يوليوس قيصر", "الإسكندر الأكبر", "صلاح الدين"] },
+  { "id": "imp-hs-19", "word": "الاكتشافات الجغرافية", "difficulty": "hard", "relatedWords": ["الثورة الصناعية", "الاستعمار", "طريق الحرير"] },
+  { "id": "imp-hs-20", "word": "المخطوطة", "difficulty": "hard", "relatedWords": ["النقش", "اللوحة", "الأثر"] }
+]

@@ -1,0 +1,17 @@
+[
+  { "id": "imp-br-01", "word": "أبل", "difficulty": "easy", "relatedWords": ["سامسونج", "هواوي", "شاومي"] },
+  { "id": "imp-br-02", "word": "سامسونج", "difficulty": "easy", "relatedWords": ["أبل", "هواوي", "شاومي"] },
+  { "id": "imp-br-03", "word": "نايكي", "difficulty": "easy", "relatedWords": ["أديداس", "بوما", "ريبوك"] },
+  { "id": "imp-br-04", "word": "أديداس", "difficulty": "easy", "relatedWords": ["نايكي", "بوما", "ريبوك"] },
+  { "id": "imp-br-05", "word": "كوكاكولا", "difficulty": "easy", "relatedWords": ["بيبسي", "سفن أب", "فانتا"] },
+  { "id": "imp-br-06", "word": "بيبسي", "difficulty": "easy", "relatedWords": ["كوكاكولا", "سفن أب", "فانتا"] },
+  { "id": "imp-br-07", "word": "ماكدونالدز", "difficulty": "easy", "relatedWords": ["برجر كينج", "كنتاكي", "دومينوز"] },
+  { "id": "imp-br-08", "word": "جوجل", "difficulty": "easy", "relatedWords": ["مايكروسوفت", "أمازون", "فيسبوك"] },
+  { "id": "imp-br-09", "word": "تسلا", "difficulty": "medium", "relatedWords": ["تويوتا", "بي إم دبليو", "مرسيدس"] },
+  { "id": "imp-br-10", "word": "مرسيدس", "difficulty": "medium", "relatedWords": ["بي إم دبليو", "أودي", "تسلا"] },
+  { "id": "imp-br-11", "word": "لويس فيتون", "difficulty": "medium", "relatedWords": ["غوتشي", "شانيل", "برادا"] },
+  { "id": "imp-br-12", "word": "أمازون", "difficulty": "easy", "relatedWords": ["جوجل", "مايكروسوفت", "علي بابا"] },
+  { "id": "imp-br-13", "word": "نتفليكس", "difficulty": "easy", "relatedWords": ["يوتيوب", "ديزني بلس", "أمازون برايم"] },
+  { "id": "imp-br-14", "word": "ستاربكس", "difficulty": "medium", "relatedWords": ["كوستا كوفي", "نسكافيه", "دانكن"] },
+  { "id": "imp-br-15", "word": "رولكس", "difficulty": "hard", "relatedWords": ["كاسيو", "أوميغا", "سيكو"] }
+]

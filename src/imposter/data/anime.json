@@ -1,0 +1,22 @@
+[
+  { "id": "imp-an-01", "word": "ناروتو", "difficulty": "easy", "relatedWords": ["ون بيس", "بليتش", "بوروتو"] },
+  { "id": "imp-an-02", "word": "ون بيس", "difficulty": "easy", "relatedWords": ["ناروتو", "بليتش", "فيري تيل"] },
+  { "id": "imp-an-03", "word": "دراغون بول", "difficulty": "easy", "relatedWords": ["ناروتو", "ون بيس", "بليتش"] },
+  { "id": "imp-an-04", "word": "النينجا", "difficulty": "easy", "relatedWords": ["الساموراي", "المحارب", "القرصان"] },
+  { "id": "imp-an-05", "word": "القرصان", "difficulty": "easy", "relatedWords": ["النينجا", "الساموراي", "المحارب"] },
+  { "id": "imp-an-06", "word": "أتاك أون تايتن", "difficulty": "medium", "relatedWords": ["ديمون سلاير", "جوجوتسو كايسن", "المحقق كونان"] },
+  { "id": "imp-an-07", "word": "ديمون سلاير", "difficulty": "medium", "relatedWords": ["أتاك أون تايتن", "جوجوتسو كايسن", "ون بانش مان"] },
+  { "id": "imp-an-08", "word": "المحقق كونان", "difficulty": "medium", "relatedWords": ["ديث نوت", "أتاك أون تايتن", "فيري تيل"] },
+  { "id": "imp-an-09", "word": "بوكيمون", "difficulty": "easy", "relatedWords": ["ديجيمون", "يوغي أوه", "دراغون بول"] },
+  { "id": "imp-an-10", "word": "الماذا", "difficulty": "hard", "relatedWords": ["القدرة الخارقة", "السحر", "الطاقة"] },
+  { "id": "imp-an-11", "word": "ديث نوت", "difficulty": "medium", "relatedWords": ["المحقق كونان", "جوجوتسو كايسن", "أتاك أون تايتن"] },
+  { "id": "imp-an-12", "word": "الاستوديو", "difficulty": "hard", "relatedWords": ["الرسام", "المخرج", "الناشر"] },
+  { "id": "imp-an-13", "word": "المانجا", "difficulty": "easy", "relatedWords": ["الأنمي", "القصة المصورة", "الرواية"] },
+  { "id": "imp-an-14", "word": "ون بانش مان", "difficulty": "medium", "relatedWords": ["ديمون سلاير", "ناروتو", "دراغون بول"] },
+  { "id": "imp-an-15", "word": "توتورو", "difficulty": "hard", "relatedWords": ["بوكيمون", "دورايمون", "ديجيمون"] },
+  { "id": "imp-an-16", "word": "الشخصية الرئيسية", "difficulty": "medium", "relatedWords": ["الشرير", "الرفيق", "الحكيم"] },
+  { "id": "imp-an-17", "word": "الكوسبلاي", "difficulty": "easy", "relatedWords": ["الأزياء", "المهرجان", "التنكر"] },
+  { "id": "imp-an-18", "word": "جوجوتسو كايسن", "difficulty": "hard", "relatedWords": ["أتاك أون تايتن", "ديمون سلاير", "بليتش"] },
+  { "id": "imp-an-19", "word": "بليتش", "difficulty": "medium", "relatedWords": ["ناروتو", "ون بيس", "دراغون بول"] },
+  { "id": "imp-an-20", "word": "الحكيم", "difficulty": "hard", "relatedWords": ["المعلم", "الشرير", "الرفيق"] }
+]

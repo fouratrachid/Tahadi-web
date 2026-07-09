@@ -57,26 +57,45 @@ export function HomeScreen({ nav }: { nav: Nav }) {
         <p className="text-txt2 text-sm font-semibold">{AR.home.subtitle}</p>
       </div>
 
-      <nav className="flex flex-col gap-3 pb-4">
-        <Button
-          big
-          onClick={() => {
-            reset();
-            nav.go("setup");
-          }}
-        >
-          {AR.home.newGame}
-        </Button>
-        <Button variant="secondary" onClick={() => nav.go("packs")}>
-          {AR.home.packs}
-        </Button>
-        <Button variant="secondary" onClick={() => nav.go("history")}>
-          {AR.home.history}
-        </Button>
+      <div className="flex flex-col gap-4 pb-4">
+        <div className="border-line bg-surface flex flex-col gap-3 rounded-2xl border p-4">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-lg font-black">{AR.hub.triviaTitle}</span>
+            <span className="text-txt2 text-sm font-semibold">{AR.hub.triviaDesc}</span>
+          </div>
+          <Button
+            big
+            onClick={() => {
+              reset();
+              nav.go("setup");
+            }}
+          >
+            {AR.home.newGame}
+          </Button>
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={() => nav.go("packs")}>
+              {AR.home.packs}
+            </Button>
+            <Button variant="secondary" onClick={() => nav.go("history")}>
+              {AR.home.history}
+            </Button>
+          </div>
+        </div>
+
+        <div className="border-line bg-surface flex flex-col gap-3 rounded-2xl border p-4">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-lg font-black">🕵️ {AR.hub.imposterTitle}</span>
+            <span className="text-txt2 text-sm font-semibold">{AR.hub.imposterDesc}</span>
+          </div>
+          <Button big variant="amber" onClick={() => nav.go("imposter")}>
+            {AR.imposter.home.start}
+          </Button>
+        </div>
+
         <Button variant="ghost" onClick={() => nav.go("settings")}>
           {AR.home.settings}
         </Button>
-      </nav>
+      </div>
     </main>
   );
 }

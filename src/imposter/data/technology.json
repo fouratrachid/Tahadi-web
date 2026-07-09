@@ -1,0 +1,17 @@
+[
+  { "id": "imp-tc-01", "word": "الهاتف الذكي", "difficulty": "easy", "relatedWords": ["الحاسوب المحمول", "الجهاز اللوحي", "الساعة الذكية"] },
+  { "id": "imp-tc-02", "word": "الإنترنت", "difficulty": "easy", "relatedWords": ["الشبكة", "الواي فاي", "البلوتوث"] },
+  { "id": "imp-tc-03", "word": "تطبيق", "difficulty": "easy", "relatedWords": ["برنامج", "موقع", "لعبة"] },
+  { "id": "imp-tc-04", "word": "الذكاء الاصطناعي", "difficulty": "medium", "relatedWords": ["الروبوت", "التعلم الآلي", "البرمجة"] },
+  { "id": "imp-tc-05", "word": "وسائل التواصل الاجتماعي", "difficulty": "easy", "relatedWords": ["البريد الإلكتروني", "الرسائل النصية", "المدونة"] },
+  { "id": "imp-tc-06", "word": "الحاسوب", "difficulty": "easy", "relatedWords": ["الهاتف", "الطابعة", "الشاشة"] },
+  { "id": "imp-tc-07", "word": "كلمة المرور", "difficulty": "medium", "relatedWords": ["اسم المستخدم", "البصمة", "الرمز السري"] },
+  { "id": "imp-tc-08", "word": "الروبوت", "difficulty": "medium", "relatedWords": ["الذكاء الاصطناعي", "الآلة", "الطائرة المسيرة"] },
+  { "id": "imp-tc-09", "word": "البرمجة", "difficulty": "medium", "relatedWords": ["التصميم", "التطوير", "الاختبار"] },
+  { "id": "imp-tc-10", "word": "الشحن اللاسلكي", "difficulty": "hard", "relatedWords": ["البطارية", "المنفذ", "الكابل"] },
+  { "id": "imp-tc-11", "word": "الواقع الافتراضي", "difficulty": "hard", "relatedWords": ["الواقع المعزز", "الألعاب", "المحاكاة"] },
+  { "id": "imp-tc-12", "word": "الحوسبة السحابية", "difficulty": "hard", "relatedWords": ["التخزين", "الخادم", "قاعدة البيانات"] },
+  { "id": "imp-tc-13", "word": "الطابعة", "difficulty": "easy", "relatedWords": ["الماسح الضوئي", "الشاشة", "لوحة المفاتيح"] },
+  { "id": "imp-tc-14", "word": "البريد الإلكتروني", "difficulty": "easy", "relatedWords": ["الرسائل النصية", "المكالمة", "المحادثة"] },
+  { "id": "imp-tc-15", "word": "العملة الرقمية", "difficulty": "hard", "relatedWords": ["البنك الرقمي", "المحفظة الإلكترونية", "الاستثمار"] }
+]

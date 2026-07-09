@@ -1,0 +1,22 @@
+[
+  { "id": "imp-tn-01", "word": "كسكسي", "difficulty": "easy", "relatedWords": ["لبلابي", "مقرونة", "طاجين"] },
+  { "id": "imp-tn-02", "word": "لبلابي", "difficulty": "easy", "relatedWords": ["كسكسي", "بريك", "مقرونة"] },
+  { "id": "imp-tn-03", "word": "تونس العاصمة", "difficulty": "easy", "relatedWords": ["صفاقس", "سوسة", "بنزرت"] },
+  { "id": "imp-tn-04", "word": "جربة", "difficulty": "easy", "relatedWords": ["الحمامات", "سوسة", "المهدية"] },
+  { "id": "imp-tn-05", "word": "قرطاج", "difficulty": "easy", "relatedWords": ["الجم", "دقة", "كركوان"] },
+  { "id": "imp-tn-06", "word": "الحبيب بورقيبة", "difficulty": "medium", "relatedWords": ["زين العابدين بن علي", "قيس سعيد", "الباجي قائد السبسي"] },
+  { "id": "imp-tn-07", "word": "الشيشة", "difficulty": "easy", "relatedWords": ["القهوة", "الشاي بالنعناع", "التمر"] },
+  { "id": "imp-tn-08", "word": "الحرقة", "difficulty": "hard", "relatedWords": ["الهجرة", "البطالة", "السفر"] },
+  { "id": "imp-tn-09", "word": "بريك", "difficulty": "easy", "relatedWords": ["لبلابي", "كسكسي", "العجة"] },
+  { "id": "imp-tn-10", "word": "المهرجان الدولي بقرطاج", "difficulty": "medium", "relatedWords": ["أيام قرطاج السينمائية", "مهرجان الحمامات", "مهرجان دوز"] },
+  { "id": "imp-tn-11", "word": "الترجي الرياضي", "difficulty": "medium", "relatedWords": ["النادي الإفريقي", "النجم الساحلي", "المنتخب التونسي"] },
+  { "id": "imp-tn-12", "word": "الصحراء التونسية", "difficulty": "medium", "relatedWords": ["دوز", "توزر", "قابس"] },
+  { "id": "imp-tn-13", "word": "الحرف اليدوية", "difficulty": "hard", "relatedWords": ["الشاشية", "الفخار", "الزربية"] },
+  { "id": "imp-tn-14", "word": "الشاشية", "difficulty": "medium", "relatedWords": ["الجبة", "السفساري", "البرنس"] },
+  { "id": "imp-tn-15", "word": "سيدي بوسعيد", "difficulty": "medium", "relatedWords": ["الحمامات", "قرطاج", "المرسى"] },
+  { "id": "imp-tn-16", "word": "الديوانية", "difficulty": "medium", "relatedWords": ["السهرة العائلية", "الجلسة", "المقهى"] },
+  { "id": "imp-tn-17", "word": "المطبخ التونسي", "difficulty": "easy", "relatedWords": ["المطبخ المغربي", "المطبخ الجزائري", "المطبخ الليبي"] },
+  { "id": "imp-tn-18", "word": "زيت الزيتون", "difficulty": "easy", "relatedWords": ["الهريسة", "التمر", "الفلفل"] },
+  { "id": "imp-tn-19", "word": "الهريسة", "difficulty": "easy", "relatedWords": ["زيت الزيتون", "الحرشة", "الشطة"] },
+  { "id": "imp-tn-20", "word": "الثورة التونسية", "difficulty": "hard", "relatedWords": ["الربيع العربي", "الانتخابات", "الدستور"] }
+]

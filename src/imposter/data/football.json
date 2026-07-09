@@ -1,0 +1,22 @@
+[
+  { "id": "imp-fb-01", "word": "ميسي", "difficulty": "easy", "relatedWords": ["مبابي", "رونالدو", "نيمار"] },
+  { "id": "imp-fb-02", "word": "رونالدو", "difficulty": "easy", "relatedWords": ["ميسي", "بنزيما", "مبابي"] },
+  { "id": "imp-fb-03", "word": "كرة القدم", "difficulty": "easy", "relatedWords": ["كرة اليد", "كرة السلة", "الرغبي"] },
+  { "id": "imp-fb-04", "word": "الحكم", "difficulty": "easy", "relatedWords": ["المدرب", "الحارس", "القائد"] },
+  { "id": "imp-fb-05", "word": "ركلة جزاء", "difficulty": "easy", "relatedWords": ["ركلة حرة", "رمية تماس", "ضربة زاوية"] },
+  { "id": "imp-fb-06", "word": "برشلونة", "difficulty": "easy", "relatedWords": ["ريال مدريد", "أتلتيكو مدريد", "إشبيلية"] },
+  { "id": "imp-fb-07", "word": "ريال مدريد", "difficulty": "easy", "relatedWords": ["برشلونة", "بايرن ميونخ", "ليفربول"] },
+  { "id": "imp-fb-08", "word": "كأس العالم", "difficulty": "medium", "relatedWords": ["كأس أمم أفريقيا", "دوري أبطال أوروبا", "كأس العرب"] },
+  { "id": "imp-fb-09", "word": "الحارس", "difficulty": "easy", "relatedWords": ["المدافع", "الظهير", "القائد"] },
+  { "id": "imp-fb-10", "word": "المدرب", "difficulty": "easy", "relatedWords": ["الحكم", "اللاعب", "المدير الرياضي"] },
+  { "id": "imp-fb-11", "word": "الملعب", "difficulty": "easy", "relatedWords": ["المدرج", "غرفة الملابس", "النادي"] },
+  { "id": "imp-fb-12", "word": "بطاقة حمراء", "difficulty": "medium", "relatedWords": ["بطاقة صفراء", "إنذار", "طرد"] },
+  { "id": "imp-fb-13", "word": "التسلل", "difficulty": "medium", "relatedWords": ["ركلة حرة", "خطأ", "ضربة زاوية"] },
+  { "id": "imp-fb-14", "word": "الديربي", "difficulty": "medium", "relatedWords": ["النهائي", "القمة", "الكلاسيكو"] },
+  { "id": "imp-fb-15", "word": "الترجي الرياضي", "difficulty": "medium", "relatedWords": ["النادي الإفريقي", "النجم الساحلي", "الصفاقسي"] },
+  { "id": "imp-fb-16", "word": "بيليه", "difficulty": "medium", "relatedWords": ["مارادونا", "زيدان", "رونالدينيو"] },
+  { "id": "imp-fb-17", "word": "مارادونا", "difficulty": "medium", "relatedWords": ["بيليه", "زيدان", "ميسي"] },
+  { "id": "imp-fb-18", "word": "زيدان", "difficulty": "medium", "relatedWords": ["مارادونا", "بيليه", "بيكيه"] },
+  { "id": "imp-fb-19", "word": "الهداف", "difficulty": "medium", "relatedWords": ["صانع الألعاب", "القائد", "الحارس"] },
+  { "id": "imp-fb-20", "word": "الاحتراف", "difficulty": "hard", "relatedWords": ["الإعارة", "الانتقال الحر", "العقد"] }
+]

@@ -1,0 +1,17 @@
+[
+  { "id": "imp-pl-01", "word": "الرئيس", "difficulty": "easy", "relatedWords": ["الوزير الأول", "الملك", "النائب"] },
+  { "id": "imp-pl-02", "word": "البرلمان", "difficulty": "medium", "relatedWords": ["الحكومة", "المجلس", "القضاء"] },
+  { "id": "imp-pl-03", "word": "الانتخابات", "difficulty": "easy", "relatedWords": ["الاستفتاء", "التصويت", "الترشح"] },
+  { "id": "imp-pl-04", "word": "الدستور", "difficulty": "medium", "relatedWords": ["القانون", "المرسوم", "اللائحة"] },
+  { "id": "imp-pl-05", "word": "الديمقراطية", "difficulty": "medium", "relatedWords": ["الملكية", "الجمهورية", "الديكتاتورية"] },
+  { "id": "imp-pl-06", "word": "الأمم المتحدة", "difficulty": "medium", "relatedWords": ["الاتحاد الأوروبي", "جامعة الدول العربية", "الاتحاد الأفريقي"] },
+  { "id": "imp-pl-07", "word": "الوزير", "difficulty": "easy", "relatedWords": ["النائب", "السفير", "الوالي"] },
+  { "id": "imp-pl-08", "word": "المعارضة", "difficulty": "medium", "relatedWords": ["الحزب الحاكم", "الائتلاف", "التحالف"] },
+  { "id": "imp-pl-09", "word": "الحزب السياسي", "difficulty": "medium", "relatedWords": ["النقابة", "الجمعية", "الحملة"] },
+  { "id": "imp-pl-10", "word": "السفارة", "difficulty": "medium", "relatedWords": ["القنصلية", "الوزارة", "البعثة"] },
+  { "id": "imp-pl-11", "word": "العقوبات الاقتصادية", "difficulty": "hard", "relatedWords": ["الحصار", "التفاوض", "المعاهدة"] },
+  { "id": "imp-pl-12", "word": "القمة الدولية", "difficulty": "hard", "relatedWords": ["المؤتمر", "الاجتماع", "المفاوضات"] },
+  { "id": "imp-pl-13", "word": "السيادة الوطنية", "difficulty": "hard", "relatedWords": ["الاستقلال", "الحدود", "الأمن القومي"] },
+  { "id": "imp-pl-14", "word": "الحملة الانتخابية", "difficulty": "medium", "relatedWords": ["التصويت", "الاستفتاء", "الترشح"] },
+  { "id": "imp-pl-15", "word": "الوزير الأول", "difficulty": "medium", "relatedWords": ["الرئيس", "النائب", "الوالي"] }
+]

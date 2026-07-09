@@ -1,0 +1,17 @@
+[
+  { "id": "imp-fd-01", "word": "البيتزا", "difficulty": "easy", "relatedWords": ["الباستا", "البرغر", "الساندويتش"] },
+  { "id": "imp-fd-02", "word": "البرغر", "difficulty": "easy", "relatedWords": ["البيتزا", "الساندويتش", "الشاورما"] },
+  { "id": "imp-fd-03", "word": "الشاورما", "difficulty": "easy", "relatedWords": ["البرغر", "الكباب", "الفلافل"] },
+  { "id": "imp-fd-04", "word": "الكسكسي", "difficulty": "easy", "relatedWords": ["الأرز", "المقرونة", "الطاجين"] },
+  { "id": "imp-fd-05", "word": "الشوكولاتة", "difficulty": "easy", "relatedWords": ["الآيس كريم", "الحلوى", "الكيك"] },
+  { "id": "imp-fd-06", "word": "القهوة", "difficulty": "easy", "relatedWords": ["الشاي", "العصير", "الحليب"] },
+  { "id": "imp-fd-07", "word": "الشاي بالنعناع", "difficulty": "easy", "relatedWords": ["القهوة", "العصير", "الحليب"] },
+  { "id": "imp-fd-08", "word": "الفاكهة", "difficulty": "easy", "relatedWords": ["الخضار", "المكسرات", "الحلويات"] },
+  { "id": "imp-fd-09", "word": "السمك", "difficulty": "easy", "relatedWords": ["اللحم", "الدجاج", "الجمبري"] },
+  { "id": "imp-fd-10", "word": "الحلويات التونسية", "difficulty": "medium", "relatedWords": ["الحلويات المغربية", "الحلويات التركية", "الحلويات اللبنانية"] },
+  { "id": "imp-fd-11", "word": "الخبز", "difficulty": "easy", "relatedWords": ["الطابونة", "المعجنات", "الكرواسون"] },
+  { "id": "imp-fd-12", "word": "السوشي", "difficulty": "medium", "relatedWords": ["الرامن", "الشاورما", "البيتزا"] },
+  { "id": "imp-fd-13", "word": "المطعم", "difficulty": "easy", "relatedWords": ["المقهى", "الفندق", "الكافيتيريا"] },
+  { "id": "imp-fd-14", "word": "الفطور", "difficulty": "easy", "relatedWords": ["الغداء", "العشاء", "الوجبة الخفيفة"] },
+  { "id": "imp-fd-15", "word": "الحار", "difficulty": "medium", "relatedWords": ["الحلو", "المالح", "الحامض"] }
+]

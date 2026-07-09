@@ -1,0 +1,17 @@
+[
+  { "id": "imp-am-01", "word": "الأسد", "difficulty": "easy", "relatedWords": ["النمر", "الفهد", "الذئب"] },
+  { "id": "imp-am-02", "word": "النمر", "difficulty": "easy", "relatedWords": ["الأسد", "الفهد", "اللبؤة"] },
+  { "id": "imp-am-03", "word": "الفيل", "difficulty": "easy", "relatedWords": ["وحيد القرن", "فرس النهر", "الزرافة"] },
+  { "id": "imp-am-04", "word": "الزرافة", "difficulty": "easy", "relatedWords": ["الفيل", "الحمار الوحشي", "الغزال"] },
+  { "id": "imp-am-05", "word": "القطة", "difficulty": "easy", "relatedWords": ["الكلب", "الأرنب", "الهامستر"] },
+  { "id": "imp-am-06", "word": "الكلب", "difficulty": "easy", "relatedWords": ["القطة", "الذئب", "الثعلب"] },
+  { "id": "imp-am-07", "word": "الحوت", "difficulty": "easy", "relatedWords": ["الدلفين", "القرش", "السمكة"] },
+  { "id": "imp-am-08", "word": "القرش", "difficulty": "easy", "relatedWords": ["الحوت", "الدلفين", "التمساح"] },
+  { "id": "imp-am-09", "word": "النسر", "difficulty": "easy", "relatedWords": ["الصقر", "البومة", "الحمامة"] },
+  { "id": "imp-am-10", "word": "الجمل", "difficulty": "easy", "relatedWords": ["الحصان", "الحمار", "البغل"] },
+  { "id": "imp-am-11", "word": "التمساح", "difficulty": "medium", "relatedWords": ["الحية", "السلحفاة", "القرش"] },
+  { "id": "imp-am-12", "word": "الباندا", "difficulty": "medium", "relatedWords": ["الدب القطبي", "الكوالا", "القرد"] },
+  { "id": "imp-am-13", "word": "الفراشة", "difficulty": "medium", "relatedWords": ["النحلة", "الذبابة", "اليعسوب"] },
+  { "id": "imp-am-14", "word": "البومة", "difficulty": "medium", "relatedWords": ["النسر", "الصقر", "الغراب"] },
+  { "id": "imp-am-15", "word": "الحرباء", "difficulty": "hard", "relatedWords": ["السحلية", "الحية", "الضفدع"] }
+]

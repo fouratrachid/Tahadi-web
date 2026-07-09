@@ -1,0 +1,22 @@
+[
+  { "id": "imp-gn-01", "word": "الشمس", "difficulty": "easy", "relatedWords": ["القمر", "النجم", "الكوكب"] },
+  { "id": "imp-gn-02", "word": "القمر", "difficulty": "easy", "relatedWords": ["الشمس", "النجم", "المجرة"] },
+  { "id": "imp-gn-03", "word": "الماء", "difficulty": "easy", "relatedWords": ["الهواء", "النار", "التراب"] },
+  { "id": "imp-gn-04", "word": "المدرسة", "difficulty": "easy", "relatedWords": ["الجامعة", "المعهد", "الحضانة"] },
+  { "id": "imp-gn-05", "word": "الطبيب", "difficulty": "easy", "relatedWords": ["الممرض", "الصيدلي", "المهندس"] },
+  { "id": "imp-gn-06", "word": "المهندس", "difficulty": "easy", "relatedWords": ["الطبيب", "المعلم", "المحامي"] },
+  { "id": "imp-gn-07", "word": "الوقت", "difficulty": "medium", "relatedWords": ["الساعة", "التقويم", "الموعد"] },
+  { "id": "imp-gn-08", "word": "الحب", "difficulty": "medium", "relatedWords": ["الصداقة", "الأسرة", "الزواج"] },
+  { "id": "imp-gn-09", "word": "النوم", "difficulty": "easy", "relatedWords": ["الاستيقاظ", "الراحة", "الحلم"] },
+  { "id": "imp-gn-10", "word": "السفر", "difficulty": "easy", "relatedWords": ["الرحلة", "السياحة", "الهجرة"] },
+  { "id": "imp-gn-11", "word": "الموسيقى", "difficulty": "easy", "relatedWords": ["الغناء", "الرقص", "الشعر"] },
+  { "id": "imp-gn-12", "word": "الكتاب", "difficulty": "easy", "relatedWords": ["الجريدة", "المجلة", "الدفتر"] },
+  { "id": "imp-gn-13", "word": "الذكاء الاصطناعي", "difficulty": "medium", "relatedWords": ["الروبوت", "الحاسوب", "الإنترنت"] },
+  { "id": "imp-gn-14", "word": "الصحة", "difficulty": "medium", "relatedWords": ["المرض", "الرياضة", "التغذية"] },
+  { "id": "imp-gn-15", "word": "السعادة", "difficulty": "medium", "relatedWords": ["الحزن", "الغضب", "الخوف"] },
+  { "id": "imp-gn-16", "word": "الطقس", "difficulty": "easy", "relatedWords": ["المناخ", "الفصول", "الرياح"] },
+  { "id": "imp-gn-17", "word": "الزواج", "difficulty": "medium", "relatedWords": ["الخطوبة", "الطلاق", "العائلة"] },
+  { "id": "imp-gn-18", "word": "العمل", "difficulty": "easy", "relatedWords": ["الدراسة", "الراحة", "التقاعد"] },
+  { "id": "imp-gn-19", "word": "المال", "difficulty": "easy", "relatedWords": ["البنك", "الاستثمار", "الادخار"] },
+  { "id": "imp-gn-20", "word": "الصداقة", "difficulty": "easy", "relatedWords": ["الحب", "الأسرة", "الزمالة"] }
+]

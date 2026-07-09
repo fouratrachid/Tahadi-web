@@ -1,0 +1,22 @@
+[
+  { "id": "imp-gg-01", "word": "تونس", "difficulty": "easy", "relatedWords": ["المغرب", "الجزائر", "ليبيا"] },
+  { "id": "imp-gg-02", "word": "المغرب", "difficulty": "easy", "relatedWords": ["تونس", "الجزائر", "موريتانيا"] },
+  { "id": "imp-gg-03", "word": "مصر", "difficulty": "easy", "relatedWords": ["السودان", "ليبيا", "الأردن"] },
+  { "id": "imp-gg-04", "word": "فرنسا", "difficulty": "easy", "relatedWords": ["إسبانيا", "إيطاليا", "ألمانيا"] },
+  { "id": "imp-gg-05", "word": "نهر النيل", "difficulty": "medium", "relatedWords": ["نهر الأمازون", "نهر دجلة", "نهر الفرات"] },
+  { "id": "imp-gg-06", "word": "جبل إفرست", "difficulty": "medium", "relatedWords": ["جبل كليمنجارو", "جبل الألب", "جبل أطلس"] },
+  { "id": "imp-gg-07", "word": "الصحراء الكبرى", "difficulty": "medium", "relatedWords": ["صحراء أريزونا", "صحراء الربع الخالي", "صحراء ناميبيا"] },
+  { "id": "imp-gg-08", "word": "المحيط الأطلسي", "difficulty": "medium", "relatedWords": ["المحيط الهادئ", "المحيط الهندي", "البحر المتوسط"] },
+  { "id": "imp-gg-09", "word": "باريس", "difficulty": "easy", "relatedWords": ["لندن", "روما", "مدريد"] },
+  { "id": "imp-gg-10", "word": "القاهرة", "difficulty": "easy", "relatedWords": ["الرباط", "الجزائر العاصمة", "تونس العاصمة"] },
+  { "id": "imp-gg-11", "word": "اليابان", "difficulty": "easy", "relatedWords": ["الصين", "كوريا الجنوبية", "تايلاند"] },
+  { "id": "imp-gg-12", "word": "البرازيل", "difficulty": "easy", "relatedWords": ["الأرجنتين", "المكسيك", "كولومبيا"] },
+  { "id": "imp-gg-13", "word": "جزيرة", "difficulty": "medium", "relatedWords": ["شبه جزيرة", "قارة", "أرخبيل"] },
+  { "id": "imp-gg-14", "word": "القارة", "difficulty": "medium", "relatedWords": ["الدولة", "الجزيرة", "الإقليم"] },
+  { "id": "imp-gg-15", "word": "خط الاستواء", "difficulty": "hard", "relatedWords": ["القطب الشمالي", "مدار السرطان", "خط غرينتش"] },
+  { "id": "imp-gg-16", "word": "البركان", "difficulty": "medium", "relatedWords": ["الزلزال", "الجبل", "الوادي"] },
+  { "id": "imp-gg-17", "word": "العاصمة", "difficulty": "easy", "relatedWords": ["المدينة", "القرية", "الميناء"] },
+  { "id": "imp-gg-18", "word": "البحر الأحمر", "difficulty": "medium", "relatedWords": ["البحر المتوسط", "الخليج العربي", "بحر العرب"] },
+  { "id": "imp-gg-19", "word": "أستراليا", "difficulty": "easy", "relatedWords": ["نيوزيلندا", "كندا", "جنوب أفريقيا"] },
+  { "id": "imp-gg-20", "word": "القطب الشمالي", "difficulty": "hard", "relatedWords": ["القطب الجنوبي", "خط الاستواء", "المحيط المتجمد"] }
+]

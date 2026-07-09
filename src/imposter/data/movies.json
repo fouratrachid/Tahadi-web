@@ -1,0 +1,22 @@
+[
+  { "id": "imp-mv-01", "word": "باتمان", "difficulty": "easy", "relatedWords": ["سبايدرمان", "سوبرمان", "الرجل الحديدي"] },
+  { "id": "imp-mv-02", "word": "سبايدرمان", "difficulty": "easy", "relatedWords": ["باتمان", "الرجل الحديدي", "هالك"] },
+  { "id": "imp-mv-03", "word": "تايتانك", "difficulty": "easy", "relatedWords": ["افاتار", "جوراسيك بارك", "الوداع"] },
+  { "id": "imp-mv-04", "word": "هاري بوتر", "difficulty": "easy", "relatedWords": ["سيد الخواتم", "نارنيا", "بيرسي جاكسون"] },
+  { "id": "imp-mv-05", "word": "المخرج", "difficulty": "easy", "relatedWords": ["الممثل", "المنتج", "كاتب السيناريو"] },
+  { "id": "imp-mv-06", "word": "السينما", "difficulty": "easy", "relatedWords": ["المسرح", "التلفزيون", "الأوبرا"] },
+  { "id": "imp-mv-07", "word": "الأوسكار", "difficulty": "medium", "relatedWords": ["الغولدن غلوب", "كان", "الأمي"] },
+  { "id": "imp-mv-08", "word": "جوكر", "difficulty": "medium", "relatedWords": ["باتمان", "فينوم", "ثانوس"] },
+  { "id": "imp-mv-09", "word": "افاتار", "difficulty": "medium", "relatedWords": ["تايتانك", "جوراسيك بارك", "ماتريكس"] },
+  { "id": "imp-mv-10", "word": "الرعب", "difficulty": "easy", "relatedWords": ["الإثارة", "الكوميديا", "الدراما"] },
+  { "id": "imp-mv-11", "word": "الكوميديا", "difficulty": "easy", "relatedWords": ["الرعب", "الرومانسية", "الأكشن"] },
+  { "id": "imp-mv-12", "word": "المسلسل", "difficulty": "easy", "relatedWords": ["الفيلم", "البرنامج", "الوثائقي"] },
+  { "id": "imp-mv-13", "word": "نتفليكس", "difficulty": "easy", "relatedWords": ["أمازون برايم", "ديزني بلس", "شاهد"] },
+  { "id": "imp-mv-14", "word": "ستار وورز", "difficulty": "medium", "relatedWords": ["ستار تريك", "افاتار", "دون"] },
+  { "id": "imp-mv-15", "word": "الجوكر", "difficulty": "medium", "relatedWords": ["باتمان", "ثانوس", "فولدمورت"] },
+  { "id": "imp-mv-16", "word": "المخرج السينمائي", "difficulty": "hard", "relatedWords": ["المونتير", "مدير التصوير", "المنتج المنفذ"] },
+  { "id": "imp-mv-17", "word": "الرسوم المتحركة", "difficulty": "easy", "relatedWords": ["الأنمي", "الأكشن", "الخيال العلمي"] },
+  { "id": "imp-mv-18", "word": "الملصق", "difficulty": "medium", "relatedWords": ["الإعلان", "التريلر", "البوستر"] },
+  { "id": "imp-mv-19", "word": "شباك التذاكر", "difficulty": "hard", "relatedWords": ["الإيرادات", "النقد", "التقييم"] },
+  { "id": "imp-mv-20", "word": "السيناريو", "difficulty": "medium", "relatedWords": ["القصة", "الحوار", "المشهد"] }
+]
