@@ -16,7 +16,7 @@ export const CORRECT_POINTS: Record<
 };
 
 /** whoAmI: guessing earlier (fewer hints revealed) scores more. */
-export const WHOAMI_POINTS = [40, 30, 20, 10] as const;
+export const WHOAMI_POINTS = [20, 15, 10, 5] as const;
 
 /**
  * Points for a correct whoAmI guess given how many hints are currently

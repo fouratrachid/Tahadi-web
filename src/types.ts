@@ -13,7 +13,11 @@ export type Category =
   | 'history'
   | 'tunisia'
   | 'tunisiaSeries'
-  | 'tunisiaFootball';
+  | 'tunisiaFootball'
+  | 'logic'
+  | 'lifestyle'
+  | 'knowledge'
+  | 'philosophy';
 
 export type ChallengeType = 'speed' | 'whoAmI' | 'reversed' | 'ordering' | 'bell';
 

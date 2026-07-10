@@ -132,7 +132,9 @@ export function SetupScreen({ nav }: { nav: Nav }) {
       </div>
 
       {/* Categories */}
-      <h2 className="text-accent mt-8 mb-3 text-lg font-bold">{AR.setup.categoriesTitle}</h2>
+      <h2 className="text-accent mt-8 mb-3 text-lg font-bold">
+        {AR.setup.categoriesTitle(MAX_CATEGORIES)}
+      </h2>
       <div className="flex flex-wrap gap-2.5">
         {CATEGORIES.map((cat) => (
           <Chip

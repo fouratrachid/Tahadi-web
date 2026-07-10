@@ -16,6 +16,10 @@ export const CATEGORIES: Category[] = [
   'tunisia',
   'tunisiaSeries',
   'tunisiaFootball',
+  'logic',
+  'lifestyle',
+  'knowledge',
+  'philosophy',
 ];
 export const CHALLENGE_TYPES: ChallengeType[] = [
   'speed',

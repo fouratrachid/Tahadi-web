@@ -1,0 +1,114 @@
+[
+  {
+    "id": "lg-or-01", "category": "logic", "challengeType": "ordering",
+    "text": "رتب هذه الأعداد لإكمال متتالية مضاعفات 4 تصاعدياً",
+    "answer": "4 ثم 8 ثم 12 ثم 16",
+    "items": ["4", "8", "12", "16"],
+    "difficulty": "easy"
+  },
+  {
+    "id": "lg-or-02", "category": "logic", "challengeType": "ordering",
+    "text": "رتب حدود متتالية فيبوناتشي الأولى تصاعدياً",
+    "answer": "1 ثم 1 ثم 2 ثم 3 ثم 5",
+    "items": ["1", "1", "2", "3", "5"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "lg-or-03", "category": "logic", "challengeType": "ordering",
+    "text": "رتب هذه الأعداد الأولية من الأصغر إلى الأكبر",
+    "answer": "2 ثم 3 ثم 5 ثم 7 ثم 11",
+    "items": ["2", "3", "5", "7", "11"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "lg-or-04", "category": "logic", "challengeType": "ordering",
+    "text": "رتب خطوات حل المسألة المنطقية بالترتيب الصحيح",
+    "answer": "فهم المعطيات ثم وضع الفرضيات ثم الاستنتاج ثم التحقق من الحل",
+    "items": ["فهم المعطيات", "وضع الفرضيات", "الاستنتاج", "التحقق من الحل"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "lg-or-05", "category": "logic", "challengeType": "ordering",
+    "text": "رتب هذه القيم من الأصغر إلى الأكبر: نصف، ربع، ثلث، خمس",
+    "answer": "خمس ثم ربع ثم ثلث ثم نصف",
+    "items": ["خمس", "ربع", "ثلث", "نصف"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "lg-or-06", "category": "logic", "challengeType": "ordering",
+    "text": "رتب مربعات الأعداد التالية تصاعدياً: 1، 4، 9، 16",
+    "answer": "1 ثم 4 ثم 9 ثم 16",
+    "items": ["1", "4", "9", "16"],
+    "difficulty": "easy"
+  },
+  {
+    "id": "lg-or-07", "category": "logic", "challengeType": "ordering",
+    "text": "رتب أضلاع الأشكال الهندسية التالية من الأقل عدد أضلاع إلى الأكثر",
+    "answer": "مثلث ثم مربع ثم خماسي ثم سداسي",
+    "items": ["مثلث", "مربع", "خماسي", "سداسي"],
+    "difficulty": "easy"
+  },
+  {
+    "id": "lg-or-08", "category": "logic", "challengeType": "ordering",
+    "text": "رتب هذه الحروف العربية حسب ترتيبها الأبجدي الهجائي",
+    "answer": "ب ثم ت ثم ث ثم ج",
+    "items": ["ب", "ت", "ث", "ج"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "lg-or-09", "category": "logic", "challengeType": "ordering",
+    "text": "أربعة أشخاص أطوالهم مختلفة: سالم أطول من كريم، وكريم أطول من ياسر، وياسر أطول من نور، رتبهم من الأقصر إلى الأطول",
+    "answer": "نور ثم ياسر ثم كريم ثم سالم",
+    "items": ["نور", "ياسر", "كريم", "سالم"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "lg-or-10", "category": "logic", "challengeType": "ordering",
+    "text": "رتب خطوات حل لغز رقمي بسيط بالترتيب المنطقي الصحيح",
+    "answer": "قراءة اللغز ثم تحديد النمط ثم اختبار فرضية ثم كتابة الإجابة",
+    "items": ["قراءة اللغز", "تحديد النمط", "اختبار فرضية", "كتابة الإجابة"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "lg-or-11", "category": "logic", "challengeType": "ordering",
+    "text": "رتب هذه الأوزان من الأخف إلى الأثقل: أربعة صناديق متفاوتة الوزن أ أثقل من ب، ب أثقل من ج، ج أثقل من د",
+    "answer": "د ثم ج ثم ب ثم أ",
+    "items": ["د", "ج", "ب", "أ"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "lg-or-12", "category": "logic", "challengeType": "ordering",
+    "text": "رتب هذه الكسور من الأصغر إلى الأكبر: 1/8، 1/4، 1/2، 1",
+    "answer": "1/8 ثم 1/4 ثم 1/2 ثم 1",
+    "items": ["1/8", "1/4", "1/2", "1"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "lg-or-13", "category": "logic", "challengeType": "ordering",
+    "text": "رتب هذه الأعداد من الأصغر إلى الأكبر: -5، 0، 3، 8",
+    "answer": "-5 ثم 0 ثم 3 ثم 8",
+    "items": ["-5", "0", "3", "8"],
+    "difficulty": "easy"
+  },
+  {
+    "id": "lg-or-14", "category": "logic", "challengeType": "ordering",
+    "text": "رتب مراحل حل معادلة رياضية بسيطة بالترتيب الصحيح",
+    "answer": "تبسيط الطرفين ثم عزل المجهول ثم حساب القيمة ثم التحقق بالتعويض",
+    "items": ["تبسيط الطرفين", "عزل المجهول", "حساب القيمة", "التحقق بالتعويض"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "lg-or-15", "category": "logic", "challengeType": "ordering",
+    "text": "أربعة أصدقاء وصلوا للسباق بترتيب مختلف: وصل خالد قبل منى، ومنى قبل سامي، وسامي قبل ريم، رتبهم من الأول إلى الأخير",
+    "answer": "خالد ثم منى ثم سامي ثم ريم",
+    "items": ["خالد", "منى", "سامي", "ريم"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "lg-or-16", "category": "logic", "challengeType": "ordering",
+    "text": "رتب هذه القيم الزمنية من الأقصر إلى الأطول: ثانية، دقيقة، ساعة، يوم",
+    "answer": "ثانية ثم دقيقة ثم ساعة ثم يوم",
+    "items": ["ثانية", "دقيقة", "ساعة", "يوم"],
+    "difficulty": "easy"
+  }
+]
