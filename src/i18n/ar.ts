@@ -125,6 +125,7 @@ export const AR = {
     bellTapZone: 'اضغط هنا',
     bellHidden: '🙈 السؤال مخفي — الجرس مفتوح',
     bellBuzzed: (name: string) => `${name} يجيب الآن!`,
+    bellRevealAnswer: '👁️ اكشف الإجابة',
     bellWasCorrect: 'هل الإجابة صحيحة؟',
     bellSteal: (name: string) => `فرصة خطف لفريق ${name}`,
   },

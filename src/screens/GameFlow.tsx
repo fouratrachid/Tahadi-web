@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 import type { Nav } from '@/App';
@@ -488,6 +488,15 @@ function BellArena({
   const buzzedTeam = bellPhase === 'buzzed' || bellPhase === 'steal' ? bellBuzzer : null;
   const buzzedName = buzzedTeam != null ? names[buzzedTeam] : '';
 
+  // The answer is never shown automatically — the referee must tap to reveal it,
+  // so it isn't spoiled on the tabletop screen when a team buzzes. Reset the
+  // reveal whenever the buzzer arms or a new question begins (bellPhase resets
+  // to 'idle' between questions).
+  const [answerShown, setAnswerShown] = useState(false);
+  useEffect(() => {
+    if (bellPhase === 'idle' || bellPhase === 'armed') setAnswerShown(false);
+  }, [bellPhase]);
+
   return (
     <main className="mx-auto flex h-dvh w-full max-w-2xl flex-col gap-2 px-3 py-3 sm:px-6">
       <BellZone
@@ -528,11 +537,22 @@ function BellArena({
             >
               {question.text}
             </p>
-            <p
-              className={`text-amber mt-2 text-center text-sm font-bold ${isPaused ? 'opacity-10' : ''}`}
-            >
-              {`${AR.play.answerLabel}: ${question.answer}`}
-            </p>
+            {!isPaused ? (
+              <div className="mt-2 flex justify-center">
+                {answerShown ? (
+                  <p className="text-amber text-center text-sm font-bold">
+                    {`${AR.play.answerLabel}: ${question.answer}`}
+                  </p>
+                ) : (
+                  <button
+                    onClick={() => setAnswerShown(true)}
+                    className="border-line bg-surface-alt text-amber min-h-9 cursor-pointer rounded-full border px-4 text-sm font-bold"
+                  >
+                    {AR.play.bellRevealAnswer}
+                  </button>
+                )}
+              </div>
+            ) : null}
           </>
         )}
 
