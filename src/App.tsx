@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { useEffect, useState } from 'react';
 
 import { initSound } from '@/lib/soundManager';
@@ -33,6 +34,7 @@ export default function App() {
       {screen === 'history' && <HistoryScreen nav={nav} />}
       {screen === 'settings' && <SettingsScreen nav={nav} />}
       {screen === 'imposter' && <ImposterFlow nav={nav} />}
+      <Analytics />
     </div>
   );
 }
